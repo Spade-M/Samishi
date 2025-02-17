@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Samishi
-#A test commit to check why branch is created
+#Final test
 class SamishiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Samishi
