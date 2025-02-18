@@ -51,10 +51,24 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    
 ]
-CORS_ORIGIN_WHITELIST = [
-     'http://localhost:3000'
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Replace with your React app's URL (e.g., if it runs on port 3000)
+    "http://127.0.0.1:5173", # Sometimes localhost needs both with and without 127.0.0.1
+    "http://yourdomain.com", # If you deploy it later
+    # Add other origins as needed
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',  # For browser-based login (if needed)
+        'rest_framework.authentication.TokenAuthentication',  # For token-based authentication (recommended for APIs)
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly', # Or other permissions as needed
+    ]
+}
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

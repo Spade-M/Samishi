@@ -1,16 +1,25 @@
-from django.shortcuts import render
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.contrib.auth import authenticate, login
+from .serializers import LoginSerializer
+from rest_framework.authtoken.models import Token # For Token authentication
+from rest_framework.permissions import AllowAny # Allow anyone to access the login
 
-# Create your views here.
-from django.shortcuts import render
+class LoginView(APIView):
+    permission_classes = [AllowAny] # Allow anyone to access the login
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            username = serializer.validated_data['username']
+            password = serializer.validated_data['password']
 
-# Create your views here.
-from django.shortcuts import render
-from rest_framework import viewsets
-from .serializers import SamishiSerializer
-from .models import Samishi
+            user = authenticate(request, username=username, password=password) # Django authentication
 
-# Create your views here.
-
-class SamishiView(viewsets.ModelViewSet):
-    serializer_class = SamishiSerializer
-    queryset = Samishi.objects.all()
+            if user:
+                login(request, user) # Django session login (if you want this)
+                token, created = Token.objects.get_or_create(user=user) # Get or create a token
+                return Response({'token': token.key}, status=status.HTTP_200_OK) # Send the token back
+            else:
+                return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
