@@ -38,7 +38,7 @@ const Home = () => {
               <p className="read-the-docs">
                 or
                 <br />
-               <a href="/">Sign Up</a> 
+               <a href="/SignUp">Sign Up</a> 
               </p>
             </div>
             <pre>{message}</pre>

@@ -3,6 +3,7 @@ import Home from "./Components/Home";
 import Posts from "./Components/Posts";
 import AboutUs from "./Components/AboutUs";
 import Login from "./Components/Login";
+import SignUp from "./Components/SignUp";
 import Header from "./Components/Header";
 import Logo from "/logo.png";
 import "./App.css";
@@ -25,7 +26,11 @@ function App() {
     {
       path : "/login",
       element : <Login/>
-    }
+    },
+    {
+      path : "/SignUp",
+      element : <SignUp/>
+    },
   ])
   return (
     <>
