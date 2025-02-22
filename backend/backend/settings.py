@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3zr52k55#1q=i!y4ob-dktby=^38gzp2o21h29rc3ur3vd=vy^'
+SECRET_KEY = 'django-insecure-*1&61i-r2k4565#*2l2tgx35!p^)%o551a@8bg(dnh#tg04=yo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'rest_framework',
-    'samishi',
+    'corsheaders',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -51,24 +51,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    
-]
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # Replace with your React app's URL (e.g., if it runs on port 3000)
-    "http://127.0.0.1:5173", # Sometimes localhost needs both with and without 127.0.0.1
-    "http://yourdomain.com", # If you deploy it later
-    # Add other origins as needed
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',  # For browser-based login (if needed)
-        'rest_framework.authentication.TokenAuthentication',  # For token-based authentication (recommended for APIs)
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly', # Or other permissions as needed
-    ]
-}
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # your React app's address
+]
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
