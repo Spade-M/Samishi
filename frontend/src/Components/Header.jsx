@@ -1,13 +1,41 @@
-import React from "react";
-import Logo from "/logo.png";
-import AboutUs from "./AboutUs";
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
 const Header = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check user authentication status when the component mounts
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/api/user/', { withCredentials: true })
+      .then(response => {
+        // If the request is successful, the user is authenticated
+        setIsLoggedIn(true);
+      })
+      .catch(error => {
+        // If the request fails (e.g., 401 Unauthorized), the user is not logged in
+        console.error('User is not logged in:', error);
+        setIsLoggedIn(false);
+      });
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:8000/api/logout/', {}, { withCredentials: true });
+      setIsLoggedIn(false);
+      // Optionally, redirect to the homepage or update global state
+      window.location.href = "/";
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  };
+
   return (
     <div>
       <nav className="navbar navbar-pink bg-pink fixed-top">
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
-    
+            {/* Insert your brand/logo here */}
           </a>
           <button
             className="navbar-toggler"
@@ -21,11 +49,10 @@ const Header = () => {
           </button>
           <div
             className="offcanvas offcanvas-end text-bg-pink"
-            tabindex="-1"
             id="offcanvasLightNavbar"
             aria-labelledby="offcanvasLightPinkNavbarLabel"
           >
-            <div className="offcanvas-header" >
+            <div className="offcanvas-header">
               <button
                 type="button"
                 className="btn-close btn-close-white"
@@ -33,8 +60,8 @@ const Header = () => {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="offcanvas-body" >
-              <ul className="navbar-nav justify-content-end flex-grow-1 pe-3" >
+            <div className="offcanvas-body">
+              <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
                 <li className="nav-item">
                   <a className="nav-link active" aria-current="page" href="/">
                     Home
@@ -65,12 +92,17 @@ const Header = () => {
                     More About Cats
                   </a>
                 </li>
-               </ul>
-              <br/>
-                <button className="btn btn-danger" type="submit">
+              </ul>
+              <br />
+              {isLoggedIn && (
+                <button
+                  className="btn btn-danger"
+                  type="button"
+                  onClick={handleLogout}
+                >
                   Log Out
                 </button>
-        
+              )}
             </div>
           </div>
         </div>
