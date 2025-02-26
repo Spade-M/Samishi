@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -7,26 +7,30 @@ const Header = () => {
   // Check user authentication status when the component mounts
   useEffect(() => {
     axios
-      .get('http://localhost:8000/api/user/', { withCredentials: true })
-      .then(response => {
+      .get("http://localhost:8000/api/user/", { withCredentials: true })
+      .then((response) => {
         // If the request is successful, the user is authenticated
         setIsLoggedIn(true);
       })
-      .catch(error => {
+      .catch((error) => {
         // If the request fails (e.g., 401 Unauthorized), the user is not logged in
-        console.error('User is not logged in:', error);
+        console.error("User is not logged in:", error);
         setIsLoggedIn(false);
       });
   }, []);
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:8000/api/logout/', {}, { withCredentials: true });
+      await axios.post(
+        "http://localhost:8000/api/logout/",
+        {},
+        { withCredentials: true }
+      );
       setIsLoggedIn(false);
       // Optionally, redirect to the homepage or update global state
       window.location.href = "/";
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error("Error during logout:", error);
     }
   };
 
@@ -72,16 +76,20 @@ const Header = () => {
                     About Us
                   </a>
                 </li>
+                {isLoggedIn && (
                 <li className="nav-item">
                   <a className="nav-link" href="/posts">
                     Posts
                   </a>
                 </li>
+                )}
+                {isLoggedIn && (
                 <li className="nav-item">
                   <a className="nav-link" href="/userinfo">
                     User Information
                   </a>
                 </li>
+                )}
                 <li className="nav-item">
                   <a className="nav-link" href="/userquery">
                     User Query
