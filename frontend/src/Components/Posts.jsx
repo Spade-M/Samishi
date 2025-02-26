@@ -66,7 +66,8 @@ const Posts = () => {
             id="caption"
             placeholder="Write Something..."
             style={{
-              backgroundColor: "#f9f9f9",
+              backgroundColor: "#eaa9ee",
+              color: "#333",
               padding: "8px",
               border: "1px solid #ddd",
               borderRadius: "4px",

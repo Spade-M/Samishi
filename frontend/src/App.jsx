@@ -8,6 +8,7 @@ import Header from "./Components/Header";
 import User from "./Components/UserInfo";
 import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
+import More from "./Components/More";
 import Logo from "/logo.png";
 import "./App.css";
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
@@ -46,6 +47,10 @@ function App() {
     {
       path : "/edit",
       element : <Edit/>
+    },
+    {
+      path : "/more",
+      element : <More/>
     },
   ])
   return (
