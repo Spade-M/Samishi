@@ -67,7 +67,7 @@ const Header = () => {
                 </li>
                </ul>
               <br/>
-                <button className="btn btn-danger" type="submit">
+                <button className="btn btn-danger" type="submit" href="/display">
                   Log Out
                 </button>
         

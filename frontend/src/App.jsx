@@ -52,6 +52,7 @@ function App() {
       path : "/more",
       element : <More/>
     },
+    
   ])
   return (
     <>

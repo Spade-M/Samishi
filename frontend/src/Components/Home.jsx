@@ -206,6 +206,7 @@ const Home = () => {
           </div>
         </p>
       </div>
+      
       <pre>{message}</pre>
       <br />
       <div style={{ height: "650px", width: "100%" }}>
