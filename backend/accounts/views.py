@@ -15,13 +15,14 @@ class SignupView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
+        email = request.data.get("email")
         if not username or not password:
             return Response({"error": "Please provide both username and password"},
                             status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(username=username).exists():
             return Response({"error": "Username already exists"},
                             status=status.HTTP_400_BAD_REQUEST)
-        user = User.objects.create_user(username=username, password=password)
+        user = User.objects.create_user(username=username, password=password, email=email)
         return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
 
 # Login Endpoint
@@ -41,6 +42,19 @@ class LoginView(APIView):
 # Endpoint to Get Current User Details
 @method_decorator(csrf_exempt, name='dispatch')
 class UserDetailView(APIView):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return Response({
+                "username": request.user.username,
+                "email": request.user.email,
+                # add other fields as needed
+            })
+        else:
+            return Response({"error": "Not authenticated"},
+                            status=status.HTTP_401_UNAUTHORIZED)
+            
+@method_decorator(csrf_exempt, name='dispatch')
+class LogoutView(APIView):
     def get(self, request):
         if request.user.is_authenticated:
             return Response({

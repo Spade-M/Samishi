@@ -17,6 +17,14 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+.title {
+  font-family:noto-sans, sans-serif;
+  font-size: 1em;
+  padding: 1em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
 .title:hover {
   filter: drop-shadow(0 0 2em #0711c9aa);
 }
@@ -46,6 +54,6 @@
   padding: 2em;
 }
 
-.read-the-docs {
+.or {
   color: #888;
 }

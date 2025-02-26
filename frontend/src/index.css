@@ -2,7 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
   color-scheme: light dark ;
-  color: rgba(24, 24, 24, 0.87);
+  color: #eaa9ee;
  
 }
 
@@ -31,8 +31,13 @@ h1 {
   line-height: 1.1;
 }
 
+#variable-proximity-demo{
+  font: 2em sans-serif;
+}
+
 pre{
   font-family:  Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size:large ;
   display: block;
   place-items: center;
 }
@@ -44,27 +49,19 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #DCA1DF;
+  background-color: #eaa9ee;
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   background-color: #ec7af1;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+
+
