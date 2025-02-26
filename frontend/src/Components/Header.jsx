@@ -108,8 +108,9 @@ const Header = () => {
                   type="button"
                   onClick={handleLogout}
                 >
-                  Log Out
-                </button>
+               </ul>
+              <br/>
+
               )}
             </div>
           </div>
