@@ -52,9 +52,10 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className="offcanvas offcanvas-end text-bg-pink"
+            className="offcanvas offcanvas-end"
             id="offcanvasLightNavbar"
             aria-labelledby="offcanvasLightPinkNavbarLabel"
+            style={{ backgroundColor: "#eaa9ee" }} // Set pink background here
           >
             <div className="offcanvas-header">
               <button
@@ -77,18 +78,18 @@ const Header = () => {
                   </a>
                 </li>
                 {isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link" href="/posts">
-                    Posts
-                  </a>
-                </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/posts">
+                      Posts
+                    </a>
+                  </li>
                 )}
                 {isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link" href="/userinfo">
-                    User Information
-                  </a>
-                </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/userinfo">
+                      User Information
+                    </a>
+                  </li>
                 )}
                 <li className="nav-item">
                   <a className="nav-link" href="/userquery">
