@@ -10,7 +10,6 @@ import User from "./Components/UserInfo";
 import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
 import More from "./Components/More";
-import Feeds from "./Components/Feeds";
 import Layout from "./Components/Layout";
 import "./App.css";
 
@@ -21,7 +20,6 @@ function App() {
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
-        { path: "/feeds", element: <Feeds /> },
         { path: "/about", element: <AboutUs /> },
         { path: "/posts", element: <Posts /> },
         { path: "/login", element: <Login /> },

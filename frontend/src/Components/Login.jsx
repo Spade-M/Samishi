@@ -108,11 +108,13 @@ const Login = () => {
         </form>
       </div>
       <div>
+
+        
       <img
             src={cat1}
             alt="Playing Cat"
             className="img-fluid"
-            style={{ width: "250px",bottom: "0px", left: "20%",position: "absolute" , rotate: "-48deg"}}
+            style={{ width: "250px",bottom: "70%", left: "-70%",position: "relative  " , rotate: "-48deg"}}  
           ></img>
       </div>
     </div>
