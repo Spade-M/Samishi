@@ -31,6 +31,7 @@ const EditInfo = () => {
       )
       .then((response) => {
         setMessage(response.data.message || "User updated successfully.");
+        window.location.href = "/";
       })
       .catch((error) => {
         console.error("Error updating user details:", error);

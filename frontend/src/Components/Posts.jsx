@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import cat1 from "/peakingLogo.png";
 
 const Posts = () => {
@@ -6,18 +7,62 @@ const Posts = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [caption, setCaption] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  // Clear notifications after 3 seconds
+  useEffect(() => {
+    if (errorMessage || successMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage("");
+        setSuccessMessage("");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage, successMessage]);
+
+  // Fetch posts and user info on mount
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/posts/", { withCredentials: true });
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching posts", error);
+        setErrorMessage("Error fetching posts.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/user/", { withCredentials: true });
+        setCurrentUser(res.data.username);
+      } catch (error) {
+        console.error("Error fetching user info", error);
+        setErrorMessage("Error fetching user info.");
+      }
+    };
+
+    fetchPosts();
+    fetchUser();
+  }, []);
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
-    setSelectedFiles(files);
-
+    const validImageFiles = [];
     const previews = [];
+
     files.forEach((file) => {
       if (file.type.startsWith("image/")) {
+        validImageFiles.push(file);
         const reader = new FileReader();
         reader.onloadend = () => {
           previews.push(reader.result);
-          if (previews.length === files.length) {
+          if (previews.length === validImageFiles.length) {
             setImagePreviews(previews);
           }
         };
@@ -27,25 +72,77 @@ const Posts = () => {
       }
     });
 
+    setSelectedFiles(validImageFiles);
     if (files.length === 0) {
       setImagePreviews([]);
     }
   };
 
-  const handleSubmit = (event) => {
+  // Function to remove a selected image
+  const handleRemoveImage = (indexToRemove) => {
+    const updatedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
+    const updatedPreviews = imagePreviews.filter((_, index) => index !== indexToRemove);
+    setSelectedFiles(updatedFiles);
+    setImagePreviews(updatedPreviews);
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (imagePreviews.length > 0 || caption) {
-      const newPost = { images: imagePreviews, caption };
-      setPosts([newPost, ...posts]);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    // Client-side validation:
+    if (selectedFiles.length === 0) {
+      setErrorMessage("Please select at least one image file.");
+      return;
+    }
+    if (!caption.trim()) {
+      setErrorMessage("Please enter a caption for your post.");
+      return;
+    }
+    const invalidFiles = selectedFiles.filter(file => !file.type.startsWith("image/"));
+    if (invalidFiles.length > 0) {
+      setErrorMessage("One or more selected files are not valid images.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("caption", caption);
+    selectedFiles.forEach((file) => {
+      formData.append("images", file);
+    });
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/posts/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      });
+      // Prepend the new post to the feed
+      setPosts([response.data, ...posts]);
       setSelectedFiles([]);
       setImagePreviews([]);
       setCaption("");
+      setSuccessMessage("Post uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading post", error);
+      setErrorMessage("Error uploading post. Please try again.");
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/posts/${postId}/`, { withCredentials: true });
+      setPosts(posts.filter(post => post.id !== postId));
+      setSuccessMessage("Post deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting post", error);
+      setErrorMessage("Error deleting post. Please try again.");
     }
   };
 
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-5">
-      {/* Upload Section */}
+      {/* Logo Section */}
       <div style={{ width: "300px" }}>
         <img
           src={cat1}
@@ -61,6 +158,15 @@ const Posts = () => {
         />
       </div>
 
+      {/* Notifications */}
+      {errorMessage && (
+        <div style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}>{errorMessage}</div>
+      )}
+      {successMessage && (
+        <div style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}>{successMessage}</div>
+      )}
+
+      {/* Upload Form */}
       <div
         style={{
           maxWidth: "600px",
@@ -128,7 +234,7 @@ const Posts = () => {
           </button>
         </form>
 
-        {/* Image Previews */}
+        {/* Image Previews with Remove Option */}
         <div
           style={{
             marginTop: "20px",
@@ -141,6 +247,7 @@ const Posts = () => {
             <div
               key={index}
               style={{
+                position: "relative",
                 margin: "5px",
                 width: "100px",
                 height: "100px",
@@ -150,6 +257,27 @@ const Posts = () => {
               }}
             >
               <img src={preview} alt={`Preview ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <button
+                onClick={() => handleRemoveImage(index)}
+                style={{
+                  position: "absolute",
+                  top: "2px",
+                  right: "2px",
+                  background: "rgba(0, 0, 0, 0.6)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "50%",
+                  width: "20px",
+                  height: "20px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  lineHeight: "20px",
+                  textAlign: "center",
+                }}
+                title="Remove image"
+              >
+                &times;
+              </button>
             </div>
           ))}
         </div>
@@ -158,50 +286,75 @@ const Posts = () => {
       {/* Feed Section */}
       <div className="mt-5 w-full max-w-md">
         <h2 className="text-lg font-bold text-center mb-3">Feed</h2>
-        <div className="flex flex-col items-center gap-5">
-          {posts.length === 0 && <p className="text-center text-gray-500">No posts yet!</p>}
-          {posts.map((post, index) => (
-            <div
-              key={index}
-              className="p-3 rounded-lg shadow-lg"
-              style={{
-                width: "300px",
-                background: "rgb(246, 212, 247)",
-                borderRadius: "12px",
-                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                overflow: "hidden",
-                marginBottom: "20px", // Added gap between posts
-              }}
-            >
-              {/* Scrollable Image Container */}
+        {loading ? (
+          <p className="text-center text-gray-500">Loading posts...</p>
+        ) : (
+          <div className="flex flex-col items-center gap-5">
+            {posts.length === 0 && <p className="text-center text-gray-500">No posts yet!</p>}
+            {posts.map((post) => (
               <div
+                key={post.id}
+                className="p-3 rounded-lg shadow-lg"
                 style={{
-                  display: "flex",
-                  overflowX: "auto",
-                  gap: "5px",
-                  width: "100%",
-                  paddingBottom: "5px",
+                  width: "300px",
+                  background: "rgb(246, 212, 247)",
+                  borderRadius: "12px",
+                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                  overflow: "hidden",
+                  marginBottom: "20px",
                 }}
               >
-                {post.images.map((image, imgIndex) => (
-                  <img
-                    key={imgIndex}
-                    src={image}
-                    alt={`Post ${index}`}
-                    style={{
-                      width: "300px",
-                      height: "200px",
-                      objectFit: "cover",
-                      borderRadius: "8px",
-                    }}
-                  />
-                ))}
+                {/* Scrollable Image Container */}
+                <div
+                  style={{
+                    display: "flex",
+                    overflowX: "auto",
+                    gap: "5px",
+                    width: "100%",
+                    paddingBottom: "5px",
+                  }}
+                >
+                  {post.images.map((image, imgIndex) => (
+                    <img
+                      key={imgIndex}
+                      src={image.image}
+                      alt={`Post ${post.id}`}
+                      style={{
+                        width: "300px",
+                        height: "200px",
+                        objectFit: "cover",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ))}
+                </div>
+                {/* Caption, Username & Timestamp */}
+                <div className="mt-2 text-center">
+                  <p className="text-gray-700 text-sm">{post.caption}</p>
+                  <p className="text-xs text-gray-500">
+                    Posted by {post.user} on {post.created_at}
+                  </p>
+                  {currentUser === post.user && (
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      style={{
+                        marginTop: "5px",
+                        padding: "5px 10px",
+                        backgroundColor: "#e3342f",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete Post
+                    </button>
+                  )}
+                </div>
               </div>
-              {/* Caption */}
-              <p className="mt-2 text-gray-700 text-sm text-center">{post.caption}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -74,13 +74,6 @@ const Header = () => {
                     </a>
                   </li>
                 )}
-                {isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/feeds">
-                      Feeds
-                    </a>
-                  </li>
-                )}
                 <li className="nav-item">
                   <a className="nav-link" href="/about">
                     About Us

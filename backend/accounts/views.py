@@ -6,6 +6,11 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
+from .models import Post, PostImage
+from .serializers import PostSerializer
+
 
 # Custom authentication class to bypass CSRF for logout
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -84,3 +89,38 @@ class LogoutView(APIView):
     def post(self, request):
         logout(request)
         return Response({"message": "Logged out successfully"}, status=status.HTTP_200_OK)
+
+@method_decorator(csrf_exempt, name='dispatch')
+class PostListCreateView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def get(self, request):
+        posts = Post.objects.all().order_by('-created_at')
+        serializer = PostSerializer(posts, many=True, context={'request': request})
+        return Response(serializer.data)
+
+    def post(self, request):
+        caption = request.data.get('caption', '')
+        post = Post.objects.create(user=request.user, caption=caption)
+        files = request.FILES.getlist('images')
+        for file in files:
+            PostImage.objects.create(post=post, image=file)
+        serializer = PostSerializer(post, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+@method_decorator(csrf_exempt, name='dispatch')
+class PostDetailView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, pk):
+        try:
+            # Only allow deletion if the logged in user is the owner of the post.
+            post = Post.objects.get(pk=pk, user=request.user)
+        except Post.DoesNotExist:
+            return Response({"error": "Post not found or not authorized"}, status=status.HTTP_404_NOT_FOUND)
+        post.delete()
+        return Response({"message": "Post deleted successfully"}, status=status.HTTP_200_OK)
