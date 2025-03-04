@@ -67,26 +67,25 @@ const Header = () => {
             </div>
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-              {!isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/">
-                    Home
-                  </a>
-                </li>
-              )}
+                {!isLoggedIn && (
+                  <li className="nav-item">
+                    <a className="nav-link active" aria-current="page" href="/">
+                      Home
+                    </a>
+                  </li>
+                )}
                 {isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link active" aria-current="page" href="/feeds">
-                    Feeds
-                  </a>
-                </li>
+                  <li className="nav-item">
+                    <a className="nav-link active" aria-current="page" href="/feeds">
+                      Feeds
+                    </a>
+                  </li>
                 )}
                 <li className="nav-item">
                   <a className="nav-link" href="/about">
                     About Us
                   </a>
                 </li>
-                
                 {isLoggedIn && (
                   <li className="nav-item">
                     <a className="nav-link" href="/posts">
@@ -119,10 +118,10 @@ const Header = () => {
                   type="button"
                   onClick={handleLogout}
                 >
-               </ul>
-              <br/>
-
+                  Logout
+                </button>
               )}
+              <br />
             </div>
           </div>
         </div>
