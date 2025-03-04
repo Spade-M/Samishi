@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import cat1 from "/peakingLogo.png";
-
+const API_URL = "http://localhost:8000/api";
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -27,7 +27,7 @@ const Posts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/posts/", { withCredentials: true });
+        const response = await axios.get(`${API_URL}/posts/`, { withCredentials: true });
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching posts", error);
@@ -39,7 +39,7 @@ const Posts = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:8000/api/user/", { withCredentials: true });
+        const res = await axios.get(`${API_URL}/user/`, { withCredentials: true });
         setCurrentUser(res.data.username);
       } catch (error) {
         console.error("Error fetching user info", error);
@@ -113,7 +113,7 @@ const Posts = () => {
     });
 
     try {
-      const response = await axios.post("http://localhost:8000/api/posts/", formData, {
+      const response = await axios.post(`${API_URL}/posts/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
@@ -131,7 +131,7 @@ const Posts = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:8000/api/posts/${postId}/`, { withCredentials: true });
+      await axios.delete(`${API_URL}/posts/${postId}/`, { withCredentials: true });
       setPosts(posts.filter(post => post.id !== postId));
       setSuccessMessage("Post deleted successfully!");
     } catch (error) {
