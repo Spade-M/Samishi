@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-spring/web": "^9.7.5",
+    "antd": "^5.24.2",
     "axios": "^1.7.9",
     "framer-motion": "^11.18.2",
     "gsap": "^3.12.7",

@@ -52,9 +52,10 @@ const Header = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div
-            className="offcanvas offcanvas-end text-bg-pink"
+            className="offcanvas offcanvas-end"
             id="offcanvasLightNavbar"
             aria-labelledby="offcanvasLightPinkNavbarLabel"
+            style={{ backgroundColor: "#eaa9ee" }} // Set pink background here
           >
             <div className="offcanvas-header">
               <button
@@ -66,29 +67,39 @@ const Header = () => {
             </div>
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
+              {!isLoggedIn && (
                 <li className="nav-item">
                   <a className="nav-link active" aria-current="page" href="/">
                     Home
                   </a>
                 </li>
+              )}
+                {isLoggedIn && (
+                <li className="nav-item">
+                  <a className="nav-link active" aria-current="page" href="/feeds">
+                    Feeds
+                  </a>
+                </li>
+                )}
                 <li className="nav-item">
                   <a className="nav-link" href="/about">
                     About Us
                   </a>
                 </li>
+                
                 {isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link" href="/posts">
-                    Posts
-                  </a>
-                </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/posts">
+                      Posts
+                    </a>
+                  </li>
                 )}
                 {isLoggedIn && (
-                <li className="nav-item">
-                  <a className="nav-link" href="/userinfo">
-                    User Information
-                  </a>
-                </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/userinfo">
+                      User Information
+                    </a>
+                  </li>
                 )}
                 <li className="nav-item">
                   <a className="nav-link" href="/userquery">

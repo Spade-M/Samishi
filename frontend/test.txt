@@ -151,3 +151,282 @@ const Posts = () => {
 };
 
 export default Posts;
+
+
+import React, { useState } from "react";
+import axios from "axios";
+
+const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccess(false);
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/login/",
+        { username, password },
+        { withCredentials: true } // Include cookies for session authentication
+      );
+
+      console.log("Login successful!", response.data);
+      setSuccess(true);
+      // Redirect to Posts.jsx page after login
+      window.location.href = "/posts";
+    } catch (error) {
+      if (error.response) {
+        setError(error.response.data.error || "Login failed");
+        console.error("Login failed:", error.response.data);
+      } else if (error.request) {
+        setError("No response from the server.");
+        console.error("No response:", error.request);
+      } else {
+        setError("An error occurred: " + error.message);
+        console.error("Error:", error);
+      }
+    }
+  };
+
+  return (
+    <div className="container mt-4">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="username" className="form-label">
+            Username
+          </label>
+          <input
+            type="text"
+            className="form-control"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-primary">
+          Login
+        </button>
+
+        {error && <p className="text-danger mt-2">{error}</p>}
+        {success && <p className="text-success mt-2">Login successful!</p>}
+      </form>
+    </div>
+  );
+};
+
+export default Login;
+
+
+<div className="text-center" style={{ position: "absolute", top: "-50px", left: "50%", transform: "translateX(-50%)" }}>
+          <img
+            src= {logo}
+            alt="Peeking Cat"
+            className="img-fluid"
+            style={{ width: "100px" }}
+          />
+        </div>
+
+            <div className="d-flex justify-content-center align-items-center vh-100" style={{ backgroundColor: "#f4f4f4" }}>
+
+
+
+
+            import React, { useState } from "react";
+import cat1 from "/peakingLogo.png";
+
+const Posts = () => {
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files); // Convert FileList to Array
+    setSelectedFiles(files);
+
+    const previews = [];
+    files.forEach((file) => {
+      if (file.type.startsWith("image/")) {
+        // Check if file is an image
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          previews.push(reader.result); // reader.result is the data URL
+          if (previews.length === files.length) {
+            setImagePreviews(previews); // Update state after all previews are loaded
+          }
+        };
+        reader.readAsDataURL(file); // Read file as Data URL
+      } else {
+        // Handle non-image files (optional: display error, ignore, etc.)
+        console.warn("File is not an image:", file.name);
+        // Optionally, you could remove the non-image file from selectedFiles and previews
+      }
+    });
+    if (files.length === 0) {
+      setImagePreviews([]); // Clear previews if no files are selected
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission (for client-side handling)
+    // In a real application, you would handle form submission here
+    // e.g., using fetch or axios to send data to the server
+    console.log("Form submitted with files:", selectedFiles);
+    console.log("Caption:", event.target.caption.value);
+    // You would typically FormData to send files and caption in a real scenario
+  };
+
+  return (
+    <>
+      <div style={{ width: "300px" }}>
+        <img
+          src={cat1}
+          alt="Peeking Cat"
+          className="img-fluid"
+          style={{ width: "400px", top: "55px", position: "relative",alignItems: "center", justifyContent: "center"}}
+        ></img>
+      </div>
+
+      <div
+        style={{
+          maxWidth: "600px",
+          margin: "0px auto",
+          padding: "20px",
+          border: "1px solid #ccc",
+          borderRadius: "20px",
+          background: "rgb(246, 212, 247)",
+        }}
+      >
+        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+          Create Post
+        </h2>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div style={{ marginBottom: "15px" }}>
+            <label
+              htmlFor="files"
+              style={{
+                display: "block",
+                marginBottom: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Upload Images:
+            </label>
+            <input
+              type="file"
+              name="file" // Changed to "file" instead of "file[]" for single file upload
+              id="files"
+              multiple // Keep multiple if you want multiple image upload
+              onChange={handleFileChange}
+              accept="image/*" // Optional: restrict to image files
+              style={{
+                padding: "8px",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                width: "100%",
+                boxSizing: "border-box",
+                background: "#eaa9ee",
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: "20px" }}>
+            <label
+              htmlFor="caption"
+              style={{
+                display: "block",
+                marginBottom: "5px",
+                fontWeight: "bold",
+              }}
+            >
+              Caption:
+            </label>
+            <textarea
+              name="caption"
+              id="caption"
+              placeholder="Write Something..."
+              style={{
+                backgroundColor: "#eaa9ee",
+                color: "#333",
+                padding: "8px",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                width: "100%",
+                boxSizing: "border-box",
+                minHeight: "80px",
+                resize: "vertical",
+                background: "#eaa9ee",
+              }}
+            />
+          </div>
+          <button
+            type="submit" // Changed type to "submit" for form submission
+            id="submit"
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "1px solid transparent",
+              padding: "0.6em 1.2em",
+              borderRadius: "20px",
+              cursor: "pointer",
+              fontSize: "1em",
+              fontWeight: "500",
+            }}
+          >
+            Upload Post
+          </button>
+        </form>
+        <div
+          id="preview"
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            flexWrap: "wrap",
+            backgroundColor: "#f8dff8",
+          }}
+        >
+          {imagePreviews.map((preview, index) => (
+            <div
+              key={index}
+              style={{
+                margin: "5px",
+                width: "100px",
+                height: "100px",
+                overflow: "hidden",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(234, 169, 238, 0.5)",
+      
+              }}
+            >
+              <img
+                src={preview}
+                alt={`Preview ${index + 1}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Posts;

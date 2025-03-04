@@ -57,3 +57,12 @@
 .or {
   color: #888;
 }
+
+#save:hover,
+#delete:hover,
+#clear:hover{
+  color: rgb(43, 42, 44);
+
+}
+
+

@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import logo from "/logo3.png";
+import cat1 from "/playingLogo.png";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -38,43 +40,81 @@ const Login = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="username" className="form-label">
-            Username
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" className="btn btn-primary">
-          Login
-        </button>
-
-        {error && <p className="text-danger mt-2">{error}</p>}
-        {success && <p className="text-success mt-2">Login successful!</p>}
-      </form>
+    <div>
+      <div
+        className="text-center"
+        style={{
+          position: "absolute",
+          top: "16px",
+          left: "50%",
+          transform: "translateX(-50%)",
+        }}
+      >
+        <img
+          src={logo}
+          alt="Peeking Cat"
+          className="img-fluid"
+          style={{ width: "100px" }}
+        />
+      </div>
+      <div
+        className="card p-4 shadow position-relative"
+        style={{
+          width: "350px",
+          borderRadius: "15px",
+          border: "none",
+          overflow: "hidden",
+          background: "rgb(246, 212, 247)",
+        }}
+      >
+        <h2 className="text-center">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">
+              Username
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Login</button>
+          <p className="or">
+            or
+            <br />
+            <a href="/SignUp">Sign Up</a>
+          </p>
+          {error && <p className="text-danger mt-2 text-center">{error}</p>}
+          {success && (
+            <p className="text-success mt-2 text-center">Login successful!</p>
+          )}
+        </form>
+      </div>
+      <div>
+      <img
+            src={cat1}
+            alt="Playing Cat"
+            className="img-fluid"
+            style={{ width: "250px",bottom: "0px", left: "20%",position: "absolute" , rotate: "-48deg"}}
+          ></img>
+      </div>
     </div>
   );
 };

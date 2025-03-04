@@ -9,7 +9,7 @@ import User from "./Components/UserInfo";
 import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
 import More from "./Components/More";
-import Logo from "/logo.png";
+import Feeds from "./Components/Feeds";
 import "./App.css";
 import { createBrowserRouter, RouterProvider} from "react-router-dom";
 
@@ -19,6 +19,10 @@ function App() {
     {
       path : "/",
       element : <Home/>
+    },
+    {
+      path : "/feeds",
+      element: <Feeds/>
     },
     {
       path : "/about",
