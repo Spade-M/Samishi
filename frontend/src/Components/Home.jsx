@@ -3,9 +3,27 @@ import React from "react";
 import Logo from "/logo.png";
 import SplitText from "../TextAnimations/SplitText/SplitText";
 import VariableProximity from "../TextAnimations/VariableProximity/VariableProximity";
-import InfiniteScroll from "./InfiniteScroll/InfiniteScroll";
 import Footer from "./Footer";
+import {Button, Popover, Skeleton } from 'antd';
 
+const contentStyle = {
+  height: '16px',
+  color: '#fff',
+  lineHeight: '16px',
+  textAlign: 'center',
+  background: 'black',
+};
+const content = (
+  <div>
+    <p>Content</p>
+    <p>Content</p>
+  </div>
+);
+
+const message = `
+Here You can adopt a cat as well as talk with cat owners and discuss the problem related to health issue and can admire the cutness of 
+   adorable cats
+   `;
 const Home = () => {
   const containerRef = useRef(null);
 
@@ -154,10 +172,6 @@ const Home = () => {
       ),
     },
   ];
-  const message = `
-   Here You can adopt a cat as well as talk with cat owners and discuss the problem related to health issue and can admire the cutness of 
-      adorable cats
-      `;
   return (
     <div>
       <br />
@@ -208,19 +222,13 @@ const Home = () => {
       </div>
       <pre>{message}</pre>
       <br />
-      <div style={{ height: "650px", width: "100%" }}>
-        <InfiniteScroll
-          items={items}
-          isTilted={true}
-          tiltDirection="left"
-          autoplay={true}
-          autoplaySpeed={0.1}
-          autoplayDirection="down"
-          pauseOnHover={true}
-        />
-      </div>
       <br />
       <br />
+  
+      <Popover content={content} title="Title">
+    <Button type="primary">Hover me</Button>
+  </Popover>
+  <Skeleton />
       <Footer />
     </div>
     
