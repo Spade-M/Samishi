@@ -5,7 +5,7 @@ const More = () => {
   return (
     <div>
       <div>
-        
+        <h1>Cats Fact</h1>
       </div>
 
       <div>
@@ -24,7 +24,7 @@ const More = () => {
                 height: "100%",
                 display: "grid",
                 placeItems: "center",
-                backgroundColor: "#111",
+                backgroundColor: "rgb(0, 0, 0, 0.5)",
               }}
             >
               <p

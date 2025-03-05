@@ -32,7 +32,7 @@ const UserInfo = () => {
           src={ball}
           alt="ball"
           className="img-fluid"
-          style={{ width: "100px" , top: "0px", left: "55%", position: "absolute"}}
+          style={{ width: "100px" , top: "-60px", left: "25%", position: "relative"}}
         />
       </div>
       <div className="d-flex align-items-center">

@@ -47,7 +47,7 @@ const Signup = () => {
       <div
         className="text-center"
         style={{
-          position: "absolute",
+          position: "relative",
           top: "15px",
           left: "50%",
           transform: "translateX(-50%)",
@@ -62,7 +62,7 @@ const Signup = () => {
       </div>
       <div className="d-flex align-items-center">
         {/* Left empty div for image */}
-        <div style={{ width: "200px" }}></div>
+        <div style={{ width: "400px" }}></div>
         <div
           className="card p-4 shadow"
           style={{
@@ -129,16 +129,16 @@ const Signup = () => {
           </form>
         </div>
         {/* Right empty div for image */}
-        <div style={{ width: "200px" }}>
+        <div style={{ width: "400px", }}>
           <img
             src={cat2}
             alt="Sleeping Cat"
             className="img-fluid"
             style={{
               width: "300px",
-              bottom: "0px",
-              left: "50%",
-              position: "absolute",
+              bottom: "-100px",
+              left: "-50%",
+              position: "relative",
             }}
           ></img>
         </div>

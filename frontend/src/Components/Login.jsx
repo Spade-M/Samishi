@@ -44,7 +44,7 @@ const Login = () => {
       <div
         className="text-center"
         style={{
-          position: "absolute",
+          position: "relative",
           top: "16px",
           left: "50%",
           transform: "translateX(-50%)",
@@ -54,13 +54,14 @@ const Login = () => {
           src={logo}
           alt="Peeking Cat"
           className="img-fluid"
-          style={{ width: "100px" }}
+          style={{ width: "100px"}}
         />
       </div>
       <div
         className="card p-4 shadow position-relative"
         style={{
           width: "350px",
+          top: "16px",
           borderRadius: "15px",
           border: "none",
           overflow: "hidden",
@@ -114,7 +115,7 @@ const Login = () => {
             src={cat1}
             alt="Playing Cat"
             className="img-fluid"
-            style={{ width: "250px",bottom: "70%", left: "-70%",position: "relative  " , rotate: "-48deg"}}  
+            style={{ width: "250px", left: "-70%", bottom : " 70px"  ,position: "relative " , rotate: "-48deg"}}  
           ></img>
       </div>
     </div>
