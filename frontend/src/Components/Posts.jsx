@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import cat1 from "/peakingLogo.png";
 
@@ -14,6 +14,8 @@ const Posts = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  // For comment inputs, keyed by post id
+  const [commentInputs, setCommentInputs] = useState({});
 
   // Clear notifications after 3 seconds
   useEffect(() => {
@@ -143,6 +145,54 @@ const Posts = () => {
     }
   };
 
+  // Like/Unlike a post
+  const handleLike = async (postId) => {
+    try {
+      // Assumes backend toggles like state and returns updated post data
+      const response = await axios.post(
+        `${API_URL}/posts/${postId}/like/`,
+        {},
+        { withCredentials: true }
+      );
+      const updatedPost = response.data;
+      setPosts(posts.map(post => post.id === postId ? updatedPost : post));
+    } catch (error) {
+      console.error("Error liking post", error);
+      setErrorMessage("Error liking post.");
+    }
+  };
+
+  // Handle comment submission for a specific post
+  const handleCommentSubmit = async (event, postId) => {
+    event.preventDefault();
+    const commentText = commentInputs[postId] || "";
+    if (!commentText.trim()) return;
+    try {
+      const response = await axios.post(
+        `${API_URL}/posts/${postId}/comments/`,
+        { text: commentText },
+        { withCredentials: true }
+      );
+      const newComment = response.data;
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          return { ...post, comments: [...post.comments, newComment] };
+        }
+        return post;
+      }));
+      // Clear comment input for this post
+      setCommentInputs({ ...commentInputs, [postId]: "" });
+    } catch (error) {
+      console.error("Error adding comment", error);
+      setErrorMessage("Error adding comment.");
+    }
+  };
+
+  // Update comment input for a specific post
+  const handleCommentChange = (postId, value) => {
+    setCommentInputs({ ...commentInputs, [postId]: value });
+  };
+
   const handleDelete = async (postId) => {
     try {
       await axios.delete(`${API_URL}/posts/${postId}/`, {
@@ -159,12 +209,14 @@ const Posts = () => {
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-3">
       {/* Logo */}
-      <div style={{ width: "100px", 
-        position: "relative",
-        top: "0px",
-        left:"41.5%",
-        
-      }}>
+      <div
+        style={{
+          width: "100px",
+          position: "relative",
+          top: "0px",
+          left: "41.5%",
+        }}
+      >
         <img
           src={cat1}
           alt="Peeking Cat"
@@ -177,7 +229,9 @@ const Posts = () => {
 
       {/* Notifications */}
       {errorMessage && (
-        <div style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}>
+        <div
+          style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}
+        >
           {errorMessage}
         </div>
       )}
@@ -200,15 +254,16 @@ const Posts = () => {
       {/* Create Post Modal */}
       {isModalOpen && (
         <div>
-          <div 
-          style={{
-            maxWidth: "400px",
-            margin: "0 auto",
-            padding: "20px",
-            border: "1px solid #ccc",
-            borderRadius: "20px",
-            background: "rgb(246, 212, 247)",
-          }}>
+          <div
+            style={{
+              maxWidth: "400px",
+              margin: "0 auto",
+              padding: "20px",
+              border: "1px solid #ccc",
+              borderRadius: "20px",
+              background: "rgb(246, 212, 247)",
+            }}
+          >
             <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
               Create Post
             </h2>
@@ -267,7 +322,6 @@ const Posts = () => {
                 />
               </div>
               <div className="flex justify-between">
-                
                 <button
                   type="submit"
                   style={{
@@ -302,51 +356,59 @@ const Posts = () => {
               </div>
             </form>
             <div
-          style={{
-            marginTop: "20px",
-            display: "flex",
-            flexWrap: "wrap",
-            backgroundColor: "#f8dff8",
-          }}
-        >
-          {imagePreviews.map((preview, index) => (
-            <div
-              key={index}
               style={{
-                position: "relative",
-                margin: "5px",
-                width: "100px",
-                height: "100px",
-                overflow: "hidden",
-                borderRadius: "8px",
-                boxShadow: "0 4px 8px rgba(234, 169, 238, 0.5)",
+                marginTop: "20px",
+                display: "flex",
+                flexWrap: "wrap",
+                backgroundColor: "#f8dff8",
               }}
             >
-              <img src={preview} alt={`Preview ${index + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-              <button
-                onClick={() => handleRemoveImage(index)}
-                style={{
-                  position: "absolute",
-                  top: "2px",
-                  right: "2px",
-                  background: "rgba(0, 0, 0, 0.6)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "50%",
-                  width: "20px",
-                  height: "20px",
-                  cursor: "pointer",
-                  fontSize: "12px",
-                  lineHeight: "20px",
-                  textAlign: "center",
-                }}
-                title="Remove image"
-              >
-                &times;
-              </button>
+              {imagePreviews.map((preview, index) => (
+                <div
+                  key={index}
+                  style={{
+                    position: "relative",
+                    margin: "5px",
+                    width: "100px",
+                    height: "100px",
+                    overflow: "hidden",
+                    borderRadius: "8px",
+                    boxShadow: "0 4px 8px rgba(234, 169, 238, 0.5)",
+                  }}
+                >
+                  <img
+                    src={preview}
+                    alt={`Preview ${index + 1}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <button
+                    onClick={() => handleRemoveImage(index)}
+                    style={{
+                      position: "absolute",
+                      top: "2px",
+                      right: "2px",
+                      background: "rgba(0, 0, 0, 0.6)",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "20px",
+                      height: "20px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                      lineHeight: "20px",
+                      textAlign: "center",
+                    }}
+                    title="Remove image"
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
           </div>
         </div>
       )}
@@ -357,17 +419,15 @@ const Posts = () => {
         {loading ? (
           <p className="text-center text-gray-500">Loading posts...</p>
         ) : (
-          
-          
-   
-          <div 
-          style={{
-            padding:"20px",
-            alignItems: "center",
-            justifyItems:"center",
-            backgroundColor: "pink",
-            maxWidth: "600px",
-          }}>
+          <div
+            style={{
+              padding: "20px",
+              alignItems: "center",
+              justifyItems: "center",
+              backgroundColor: "pink",
+              maxWidth: "600px",
+            }}
+          >
             {posts.length === 0 && (
               <p className="text-center text-gray-500">No posts yet!</p>
             )}
@@ -376,8 +436,8 @@ const Posts = () => {
                 key={post.id}
                 className="p-3 rounded-lg shadow-lg"
                 style={{
-                  alignItems:"center",
-                  width:"70%",
+                  alignItems: "center",
+                  width: "70%",
                   background: "rgb(246, 212, 247)",
                   borderRadius: "12px",
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
@@ -385,14 +445,16 @@ const Posts = () => {
                   marginBottom: "20px",
                 }}
               >
+                {/* Images */}
                 <div
-                style={{
-                  display: "flex",
-                  overflowX: "auto",
-                  gap: "5px",
-                  width: "100%",
-                  paddingBottom: "5px",
-                }} >
+                  style={{
+                    display: "flex",
+                    overflowX: "auto",
+                    gap: "5px",
+                    width: "100%",
+                    paddingBottom: "5px",
+                  }}
+                >
                   {post.images.map((image, imgIndex) => (
                     <img
                       key={imgIndex}
@@ -410,7 +472,73 @@ const Posts = () => {
                 {/* Caption, Username & Timestamp */}
                 <div className="mt-2 text-center">
                   <p className="text-gray-700 text-sm">{post.caption}</p>
-                  <p className="text-xs text-gray-500">Posted by {post.user} on {post.created_at}</p>
+                  <p className="text-xs text-gray-500">
+                    Posted by {post.user} on {post.created_at}
+                  </p>
+                  {/* Like Button */}
+                  <button
+                    onClick={() => handleLike(post.id)}
+                    style={{
+                      marginTop: "5px",
+                      padding: "5px 10px",
+                      backgroundColor: post.is_liked ? "#ff5c5c" : "#007bff",
+                      color: "#fff",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                    title="Like/Unlike"
+                  >
+                    {post.is_liked ? "Unlike" : "Like"} ({post.likes_count})
+                  </button>
+
+                  {/* Comments Section */}
+                  <div className="mt-3">
+                    {post.comments && post.comments.length > 0 && (
+                      <div style={{ textAlign: "left", marginBottom: "10px" }}>
+                        {post.comments.map((comment) => (
+                          <div
+                            key={comment.id}
+                            style={{
+                              marginBottom: "5px",
+                              fontSize: "0.85em",
+                            }}
+                          >
+                            <strong>{comment.user}:</strong> {comment.text}
+                            <span
+                              style={{
+                                fontSize: "0.7em",
+                                color: "#555",
+                                marginLeft: "5px",
+                              }}
+                            >
+                              ({comment.created_at})
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <form
+                      onSubmit={(e) => handleCommentSubmit(e, post.id)}
+                    >
+                      <input
+                        type="text"
+                        value={commentInputs[post.id] || ""}
+                        onChange={(e) =>
+                          handleCommentChange(post.id, e.target.value)
+                        }
+                        placeholder="Add a comment..."
+                        style={{
+                          width: "100%",
+                          padding: "6px 8px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          fontSize: "0.9em",
+                        }}
+                      />
+                    </form>
+                  </div>
+                  {/* Delete button visible only for the post owner */}
                   {currentUser === post.user && (
                     <button
                       onClick={() => handleDelete(post.id)}
