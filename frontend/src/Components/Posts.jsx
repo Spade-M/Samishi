@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import cat1 from "/peakingLogo.png";
+
 const API_URL = "http://localhost:8000/api";
+
 const Posts = () => {
   const [posts, setPosts] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -11,6 +13,7 @@ const Posts = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
   // Clear notifications after 3 seconds
   useEffect(() => {
@@ -27,7 +30,9 @@ const Posts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/posts/`, { withCredentials: true });
+        const response = await axios.get(`${API_URL}/posts/`, {
+          withCredentials: true,
+        });
         setPosts(response.data);
       } catch (error) {
         console.error("Error fetching posts", error);
@@ -39,7 +44,9 @@ const Posts = () => {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${API_URL}/user/`, { withCredentials: true });
+        const res = await axios.get(`${API_URL}/user/`, {
+          withCredentials: true,
+        });
         setCurrentUser(res.data.username);
       } catch (error) {
         console.error("Error fetching user info", error);
@@ -80,8 +87,12 @@ const Posts = () => {
 
   // Function to remove a selected image
   const handleRemoveImage = (indexToRemove) => {
-    const updatedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
-    const updatedPreviews = imagePreviews.filter((_, index) => index !== indexToRemove);
+    const updatedFiles = selectedFiles.filter(
+      (_, index) => index !== indexToRemove
+    );
+    const updatedPreviews = imagePreviews.filter(
+      (_, index) => index !== indexToRemove
+    );
     setSelectedFiles(updatedFiles);
     setImagePreviews(updatedPreviews);
   };
@@ -100,7 +111,9 @@ const Posts = () => {
       setErrorMessage("Please enter a caption for your post.");
       return;
     }
-    const invalidFiles = selectedFiles.filter(file => !file.type.startsWith("image/"));
+    const invalidFiles = selectedFiles.filter(
+      (file) => !file.type.startsWith("image/")
+    );
     if (invalidFiles.length > 0) {
       setErrorMessage("One or more selected files are not valid images.");
       return;
@@ -123,6 +136,7 @@ const Posts = () => {
       setImagePreviews([]);
       setCaption("");
       setSuccessMessage("Post uploaded successfully!");
+      setIsModalOpen(false); // Close modal after successful upload
     } catch (error) {
       console.error("Error uploading post", error);
       setErrorMessage("Error uploading post. Please try again.");
@@ -131,8 +145,10 @@ const Posts = () => {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`${API_URL}/posts/${postId}/`, { withCredentials: true });
-      setPosts(posts.filter(post => post.id !== postId));
+      await axios.delete(`${API_URL}/posts/${postId}/`, {
+        withCredentials: true,
+      });
+      setPosts(posts.filter((post) => post.id !== postId));
       setSuccessMessage("Post deleted successfully!");
     } catch (error) {
       console.error("Error deleting post", error);
@@ -141,101 +157,151 @@ const Posts = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-5">
-      {/* Logo Section */}
-      <div style={{ width: "300px" }}>
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-3">
+      {/* Logo */}
+      <div style={{ width: "100px", 
+        position: "relative",
+        top: "0px",
+        left:"41.5%",
+        
+      }}>
         <img
           src={cat1}
           alt="Peeking Cat"
           className="img-fluid"
           style={{
-            width: "400px",
-            top: "55px",
-            position: "relative",
-            alignItems: "center",
-            justifyContent: "center",
+            width: "250%",
           }}
         />
       </div>
 
       {/* Notifications */}
       {errorMessage && (
-        <div style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}>{errorMessage}</div>
+        <div style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}>
+          {errorMessage}
+        </div>
       )}
       {successMessage && (
-        <div style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}>{successMessage}</div>
+        <div
+          style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}
+        >
+          {successMessage}
+        </div>
       )}
 
-      {/* Upload Form */}
-      <div
-        style={{
-          maxWidth: "600px",
-          margin: "0 auto",
-          padding: "20px",
-          border: "1px solid #ccc",
-          borderRadius: "20px",
-          background: "rgb(246, 212, 247)",
-        }}
+      {/* Create Post Button */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="bg-blue-500 text-white px-4 py-2 rounded-full mb-5"
       >
-        <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Create Post</h2>
-        <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: "15px" }}>
-            <label htmlFor="files" style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
-              Upload Images:
-            </label>
-            <input
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              accept="image/*"
-              style={{
-                padding: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "10px",
-                width: "100%",
-                boxSizing: "border-box",
-                background: "#eaa9ee",
-              }}
-            />
-          </div>
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="caption" style={{ display: "block", marginBottom: "5px", fontWeight: "bold" }}>
-              Caption:
-            </label>
-            <textarea
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-              placeholder="Write Something..."
-              style={{
-                backgroundColor: "#eaa9ee",
-                padding: "8px",
-                border: "1px solid #ddd",
-                borderRadius: "10px",
-                width: "100%",
-                minHeight: "80px",
-                resize: "vertical",
-              }}
-            />
-          </div>
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "1px solid transparent",
-              borderRadius: "20px",
-              cursor: "pointer",
-              fontSize: "1em",
-              fontWeight: "500",
-            }}
-          >
-            Upload Post
-          </button>
-        </form>
+        Create Post
+      </button>
 
-        {/* Image Previews with Remove Option */}
-        <div
+      {/* Create Post Modal */}
+      {isModalOpen && (
+        <div>
+          <div 
+          style={{
+            maxWidth: "400px",
+            margin: "0 auto",
+            padding: "20px",
+            border: "1px solid #ccc",
+            borderRadius: "20px",
+            background: "rgb(246, 212, 247)",
+          }}>
+            <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
+              Create Post
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <div style={{ marginBottom: "15px" }}>
+                <label
+                  htmlFor="files"
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Upload Images:
+                </label>
+                <input
+                  type="file"
+                  multiple
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  style={{
+                    padding: "8px",
+                    border: "1px solid #ddd",
+                    borderRadius: "10px",
+                    width: "100%",
+                    boxSizing: "border-box",
+                    background: "#eaa9ee",
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: "20px" }}>
+                <label
+                  htmlFor="caption"
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Caption:
+                </label>
+                <textarea
+                  value={caption}
+                  onChange={(e) => setCaption(e.target.value)}
+                  placeholder="Write something..."
+                  style={{
+                    backgroundColor: "#eaa9ee",
+                    padding: "8px",
+                    border: "1px solid #ddd",
+                    borderRadius: "10px",
+                    width: "100%",
+                    minHeight: "80px",
+                    resize: "vertical",
+                    color: "black",
+                  }}
+                />
+              </div>
+              <div className="flex justify-between">
+                
+                <button
+                  type="submit"
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "1px solid transparent",
+                    borderRadius: "20px",
+                    cursor: "pointer",
+                    fontSize: "1em",
+                    fontWeight: "500",
+                  }}
+                >
+                  Upload Post
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  style={{
+                    padding: "10px 20px",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "1px solid transparent",
+                    borderRadius: "20px",
+                    cursor: "pointer",
+                    fontSize: "1em",
+                    fontWeight: "500",
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+            <div
           style={{
             marginTop: "20px",
             display: "flex",
@@ -281,22 +347,37 @@ const Posts = () => {
             </div>
           ))}
         </div>
-      </div>
+          </div>
+        </div>
+      )}
 
-      {/* Feed Section */}
-      <div className="mt-5 w-full max-w-md">
+      {/* Feed */}
+      <div>
         <h2 className="text-lg font-bold text-center mb-3">Feed</h2>
         {loading ? (
           <p className="text-center text-gray-500">Loading posts...</p>
         ) : (
-          <div className="flex flex-col items-center gap-5">
-            {posts.length === 0 && <p className="text-center text-gray-500">No posts yet!</p>}
+          
+          
+   
+          <div 
+          style={{
+            padding:"20px",
+            alignItems: "center",
+            justifyItems:"center",
+            backgroundColor: "pink",
+            maxWidth: "600px",
+          }}>
+            {posts.length === 0 && (
+              <p className="text-center text-gray-500">No posts yet!</p>
+            )}
             {posts.map((post) => (
               <div
                 key={post.id}
                 className="p-3 rounded-lg shadow-lg"
                 style={{
-                  width: "300px",
+                  alignItems:"center",
+                  width:"70%",
                   background: "rgb(246, 212, 247)",
                   borderRadius: "12px",
                   boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
@@ -304,24 +385,22 @@ const Posts = () => {
                   marginBottom: "20px",
                 }}
               >
-                {/* Scrollable Image Container */}
                 <div
-                  style={{
-                    display: "flex",
-                    overflowX: "auto",
-                    gap: "5px",
-                    width: "100%",
-                    paddingBottom: "5px",
-                  }}
-                >
+                style={{
+                  display: "flex",
+                  overflowX: "auto",
+                  gap: "5px",
+                  width: "100%",
+                  paddingBottom: "5px",
+                }} >
                   {post.images.map((image, imgIndex) => (
                     <img
                       key={imgIndex}
                       src={image.image}
                       alt={`Post ${post.id}`}
                       style={{
-                        width: "300px",
-                        height: "200px",
+                        width: "400px",
+                        height: "300px",
                         objectFit: "cover",
                         borderRadius: "8px",
                       }}
@@ -331,9 +410,7 @@ const Posts = () => {
                 {/* Caption, Username & Timestamp */}
                 <div className="mt-2 text-center">
                   <p className="text-gray-700 text-sm">{post.caption}</p>
-                  <p className="text-xs text-gray-500">
-                    Posted by {post.user} on {post.created_at}
-                  </p>
+                  <p className="text-xs text-gray-500">Posted by {post.user} on {post.created_at}</p>
                   {currentUser === post.user && (
                     <button
                       onClick={() => handleDelete(post.id)}
