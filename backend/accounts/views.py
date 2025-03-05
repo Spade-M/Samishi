@@ -8,9 +8,8 @@ from django.utils.decorators import method_decorator
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
-from .models import Post, PostImage
-from .serializers import PostSerializer
-
+from .models import Post, PostImage, Like, Comment
+from .serializers import PostSerializer  # We'll use this for posts (which now includes likes and comments)
 
 # Custom authentication class to bypass CSRF for logout
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -109,8 +108,7 @@ class PostListCreateView(APIView):
             PostImage.objects.create(post=post, image=file)
         serializer = PostSerializer(post, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-    
+
 @method_decorator(csrf_exempt, name='dispatch')
 class PostDetailView(APIView):
     authentication_classes = (CsrfExemptSessionAuthentication,)
@@ -124,3 +122,46 @@ class PostDetailView(APIView):
             return Response({"error": "Post not found or not authorized"}, status=status.HTTP_404_NOT_FOUND)
         post.delete()
         return Response({"message": "Post deleted successfully"}, status=status.HTTP_200_OK)
+
+# New endpoint: Toggle like/unlike on a post
+@method_decorator(csrf_exempt, name='dispatch')
+class PostLikeView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+        # Toggle like: if a like exists, remove it; otherwise create one.
+        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        if not created:
+            like.delete()
+        # Return updated post data including like count
+        serializer = PostSerializer(post, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+# New endpoint: Add a comment to a post
+@method_decorator(csrf_exempt, name='dispatch')
+class PostCommentView(APIView):
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        try:
+            post = Post.objects.get(pk=pk)
+        except Post.DoesNotExist:
+            return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+        text = request.data.get("text", "")
+        if not text.strip():
+            return Response({"error": "Comment text cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
+        comment = Comment.objects.create(user=request.user, post=post, text=text)
+        # Return the new comment data
+        comment_data = {
+            "id": comment.id,
+            "user": comment.user.username,
+            "text": comment.text,
+            "created_at": comment.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        return Response(comment_data, status=status.HTTP_201_CREATED)
