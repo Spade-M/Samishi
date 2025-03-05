@@ -143,7 +143,7 @@ Here are some key endpoints:
 
 ## Contributing
 
-We love contributions from the community! If you have ideas to improve CatChatter or found a bug, please feel free to open an issue or create a pull request.
+We love contributions from the community! If you have ideas to improve Samishi Community or found a bug, please feel free to open an issue or create a pull request.
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature/your-feature`).
