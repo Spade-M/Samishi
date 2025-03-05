@@ -102,9 +102,9 @@ Welcome to **Samishi** – the ultimate social media platform where cat owners c
 ## Project Structure
 
 ```
-catchatter/
+Samishi/
 ├── backend/                # Django backend
-│   ├── catchatter/         # Django project settings
+│   ├── samishi/         # Django project settings
 │   ├── posts/              # App for posts, likes, and comments
 │   │   ├── models.py      # Post, PostImage, Like, Comment models
 │   │   ├── serializers.py # Serializers for Post and related models
