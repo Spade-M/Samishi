@@ -4,14 +4,14 @@ import Logo from "/logo.png";
 import SplitText from "../TextAnimations/SplitText/SplitText";
 import VariableProximity from "../TextAnimations/VariableProximity/VariableProximity";
 import Footer from "./Footer";
-import {Button, Popover, Skeleton } from 'antd';
+import { Button, Popover, Skeleton } from "antd";
 
 const contentStyle = {
-  height: '16px',
-  color: '#fff',
-  lineHeight: '16px',
-  textAlign: 'center',
-  background: 'black',
+  height: "16px",
+  color: "#fff",
+  lineHeight: "16px",
+  textAlign: "center",
+  background: "black",
 };
 const content = (
   <div>
@@ -172,8 +172,18 @@ const Home = () => {
       ),
     },
   ];
+
+
+  const message3 = `
+    We work closely with local shelters and foster homes to rescue stray cats, providing them with medical care, socialization, and love. 
+    We assess each cat’s personality and health to ensure they are a good fit for adoption, and we match them with families who are ready to offer them a lifetime of care. 
+    Our process is designed to be smooth and supportive, helping both you and the cat transition into your new life together.
+
+    `;
   return (
-    <div>
+    <div style={{ 
+      padding: "0px",
+     }}>
       <br />
       <div className="title">
         <h1>
@@ -204,35 +214,41 @@ const Home = () => {
           <a href="/SignUp">Sign Up</a>
         </p>
       </div>
-
-      <div>
-        <p id="variable-proximity-demo">
-          <div ref={containerRef} style={{ position: "relative" }}>
-            <VariableProximity
-              label={"Welcome to the heaven of cats"}
-              className={"variable-proximity-demo"}
-              fromFontVariationSettings="'wght' 300, 'opsz' 9"
-              toFontVariationSettings="'wght' 700, 'opsz' 20"
-              containerRef={containerRef}
-              radius={100}
-              falloff="linear"
-            />
-          </div>
-        </p>
-      </div>
       
-      <pre>{message}</pre>
+        <div>
+          <p id="variable-proximity-demo">
+            <div ref={containerRef} style={{ position: "relative" }}>
+              <VariableProximity
+                label={"Welcome to the heaven of cats"}
+                className={"variable-proximity-demo"}
+                fromFontVariationSettings="'wght' 300, 'opsz' 9"
+                toFontVariationSettings="'wght' 700, 'opsz' 20"
+                containerRef={containerRef}
+                radius={100}
+                falloff="linear"
+              />
+            </div>
+          </p>
+        </div>
+
+        <pre>{message}</pre>
       <br />
       <br />
-      <br />
-  
+     <pre>{message3}</pre>
       <Popover content={content} title="Title">
-    <Button type="primary">Hover me</Button>
-  </Popover>
-  <Skeleton />
-      <Footer />
+        <Button type="primary">Hover me</Button>
+      </Popover>
+      <Skeleton />
+      <br />
+      <div
+        style={{
+          backgroundColor: "rgb(0, 0, 0, 0.5)",
+          padding: "10px",  
+        }}
+      >
+        <Footer />
+      </div>
     </div>
-    
   );
 };
 

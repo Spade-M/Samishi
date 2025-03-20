@@ -923,3 +923,47 @@ export default Posts;
           />
         </div>
       </div>
+
+      import React from 'react'
+
+const Footer = () => {
+  return (
+    <div>
+      <footer className= "bg-purple text-dark py-2">
+      <p className= "text-center">
+      Copyright &copy; : SamishiCommunity.com
+      </p>
+    </footer>
+    </div>
+  )
+}
+
+export default Footer
+
+
+
+ <div>
+        <p id="variable-proximity-demo">
+          <div ref={containerRef} style={{ position: "relative" }}>
+            <VariableProximity
+              label={"More About Us"}
+              className={"variable-proximity-demo"}
+              fromFontVariationSettings="'wght' 300, 'opsz' 9"
+              toFontVariationSettings="'wght' 700, 'opsz' 20"
+              containerRef={containerRef}
+              radius={100}
+              falloff="linear"
+            />
+          </div>
+        </p>
+      </div>
+
+      <div>
+        <img src={Logo1} className="logo" alt="Cat logo" />
+      </div>
+      <pre>{message1}</pre>
+      
+      <pre>{message2}</pre>
+      
+      <pre>{message3}</pre>
+
