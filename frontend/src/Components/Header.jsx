@@ -37,9 +37,10 @@ const Header = () => {
   return (
     <div>
       <nav className="navbar navbar-pink bg-pink fixed-top">
-        <div className="container-fluid">
-          <a className="navbar-brand" href="/">
+        <div className="container-fluid" >
+          <a className="navbar-brand" href="/" >
             {/* Insert your brand/logo here */}
+          
           </a>
           <button
             className="navbar-toggler"

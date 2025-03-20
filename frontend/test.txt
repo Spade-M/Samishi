@@ -806,3 +806,120 @@ const Posts = () => {
 };
 
 export default Posts;
+
+
+<div
+        style={{
+          width: "250px",
+          height :"100%",
+          backgroundColor: "pink",
+          position: "fixed",
+          left: "0px",
+          top: "0px",
+        }}
+      >
+
+        {
+    key: "sub1",
+    label: "Navigation One",
+    icon: <MailOutlined />,
+    children: [
+      {
+        key: "5",
+        label: "Option 5",
+      },
+      {
+        key: "6",
+        label: "Option 6",
+      },
+      {
+        key: "7",
+        label: "Option 7",
+      },
+      {
+        key: "8",
+        label: "Option 8",
+      },
+    ],
+  },
+  {
+    key: "sub2",
+    label: "Navigation Two",
+    icon: <AppstoreOutlined />,
+    children: [
+      {
+        key: "9",
+        label: "Option 9",
+      },
+      {
+        key: "10",
+        label: "Option 10",
+      },
+      {
+        key: "sub3",
+        label: "Submenu",
+        children: [
+          {
+            key: "11",
+            label: "Option 11",
+          },
+          {
+            key: "12",
+            label: "Option 12",
+          },
+        ],
+      },
+    ],
+  },
+
+
+
+
+
+
+  <div
+        style={{
+          width: "250px",
+          height: "100%",
+          backgroundColor: "pink",
+          position: "fixed",
+          left: "0px",
+          top: "50px",
+        }}
+      >
+        <Button
+          type="primary"
+          onClick={toggleCollapsed}
+          style={{
+            marginBottom: 16,
+            display: "flex",
+          }}
+        >
+          {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+        </Button>
+        <Menu
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          theme="light"
+          inlineCollapsed={collapsed}
+          items={items}
+        />
+        <div
+          style={{
+            width: "100px",
+            position: "relative",
+
+            left: "30%",
+          }}
+        >
+          <img
+            src={cat1}
+            alt="Peeking Cat"
+            className="img-fluid"
+            style={{
+              width: "250%",
+            }}
+          />
+        </div>
+      </div>

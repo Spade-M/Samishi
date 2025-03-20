@@ -1,9 +1,10 @@
 import React from "react";
 import PixelTransition from "../Animations/PixelTransition/PixelTransition";
-
+import Create from "./Create";
 const More = () => {
   return (
     <div>
+      <Create/>
       <div>
         <h1>Cats Fact</h1>
       </div>

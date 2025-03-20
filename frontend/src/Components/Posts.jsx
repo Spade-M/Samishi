@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import cat1 from "/peakingLogo.png";
+import Sidebar from "./Sidebar";
 
 const API_URL = "http://localhost:8000/api";
 
@@ -155,7 +156,7 @@ const Posts = () => {
         { withCredentials: true }
       );
       const updatedPost = response.data;
-      setPosts(posts.map(post => post.id === postId ? updatedPost : post));
+      setPosts(posts.map((post) => (post.id === postId ? updatedPost : post)));
     } catch (error) {
       console.error("Error liking post", error);
       setErrorMessage("Error liking post.");
@@ -174,12 +175,14 @@ const Posts = () => {
         { withCredentials: true }
       );
       const newComment = response.data;
-      setPosts(posts.map(post => {
-        if (post.id === postId) {
-          return { ...post, comments: [...post.comments, newComment] };
-        }
-        return post;
-      }));
+      setPosts(
+        posts.map((post) => {
+          if (post.id === postId) {
+            return { ...post, comments: [...post.comments, newComment] };
+          }
+          return post;
+        })
+      );
       // Clear comment input for this post
       setCommentInputs({ ...commentInputs, [postId]: "" });
     } catch (error) {
@@ -208,13 +211,13 @@ const Posts = () => {
 
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-3">
-      {/* Logo */}
+      
       <div
         style={{
           width: "100px",
           position: "relative",
           top: "0px",
-          left: "41.5%",
+          left: "44.5%",
         }}
       >
         <img
@@ -229,9 +232,7 @@ const Posts = () => {
 
       {/* Notifications */}
       {errorMessage && (
-        <div
-          style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}
-        >
+        <div style={{ color: "red", marginBottom: "15px", fontWeight: "bold" }}>
           {errorMessage}
         </div>
       )}
@@ -413,153 +414,162 @@ const Posts = () => {
         </div>
       )}
 
-      {/* Feed */}
-      <div>
-        <h2 className="text-lg font-bold text-center mb-3">Feed</h2>
-        {loading ? (
-          <p className="text-center text-gray-500">Loading posts...</p>
-        ) : (
-          <div
-            style={{
-              padding: "20px",
-              alignItems: "center",
-              justifyItems: "center",
-              backgroundColor: "pink",
-              maxWidth: "600px",
-            }}
-          >
-            {posts.length === 0 && (
-              <p className="text-center text-gray-500">No posts yet!</p>
-            )}
-            {posts.map((post) => (
-              <div
-                key={post.id}
-                className="p-3 rounded-lg shadow-lg"
-                style={{
-                  alignItems: "center",
-                  width: "70%",
-                  background: "rgb(246, 212, 247)",
-                  borderRadius: "12px",
-                  boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-                  overflow: "hidden",
-                  marginBottom: "20px",
-                }}
-              >
-                {/* Images */}
+      <div className="d-flex align-items-center">
+        {/* Left empty div for image */}
+        <div style={{ width: "200px", backgroundColor: "red" }}>
+          <Sidebar/>
+        </div>
+
+        {/* Feed */}
+        <div>
+          <h2 className="text-lg font-bold text-center mb-3">Feed</h2>
+          {loading ? (
+            <p className="text-center text-gray-500">Loading posts...</p>
+          ) : (
+            <div
+              style={{
+                padding: "20px",
+                alignItems: "center",
+                justifyItems: "center",
+                backgroundColor: "pink",
+                maxWidth: "600px",
+              }}
+            >
+              {posts.length === 0 && (
+                <p className="text-center text-gray-500">No posts yet!</p>
+              )}
+              {posts.map((post) => (
                 <div
+                  key={post.id}
+                  className="p-3 rounded-lg shadow-lg"
                   style={{
-                    display: "flex",
-                    overflowX: "auto",
-                    gap: "5px",
-                    width: "100%",
-                    paddingBottom: "5px",
+                    alignItems: "center",
+                    width: "70%",
+                    background: "rgb(246, 212, 247)",
+                    borderRadius: "12px",
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                    overflow: "hidden",
+                    marginBottom: "20px",
                   }}
                 >
-                  {post.images.map((image, imgIndex) => (
-                    <img
-                      key={imgIndex}
-                      src={image.image}
-                      alt={`Post ${post.id}`}
-                      style={{
-                        width: "400px",
-                        height: "300px",
-                        objectFit: "cover",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  ))}
-                </div>
-                {/* Caption, Username & Timestamp */}
-                <div className="mt-2 text-center">
-                  <p className="text-gray-700 text-sm">{post.caption}</p>
-                  <p className="text-xs text-gray-500">
-                    Posted by {post.user} on {post.created_at}
-                  </p>
-                  {/* Like Button */}
-                  <button
-                    onClick={() => handleLike(post.id)}
+                  {/* Images */}
+                  <div
                     style={{
-                      marginTop: "5px",
-                      padding: "5px 10px",
-                      backgroundColor: post.is_liked ? "#ff5c5c" : "#007bff",
-                      color: "#fff",
-                      border: "none",
-                      borderRadius: "5px",
-                      cursor: "pointer",
+                      display: "flex",
+                      overflowX: "auto",
+                      gap: "5px",
+                      width: "100%",
+                      paddingBottom: "5px",
                     }}
-                    title="Like/Unlike"
                   >
-                    {post.is_liked ? "Unlike" : "Like"} ({post.likes_count})
-                  </button>
-
-                  {/* Comments Section */}
-                  <div className="mt-3">
-                    {post.comments && post.comments.length > 0 && (
-                      <div style={{ textAlign: "left", marginBottom: "10px" }}>
-                        {post.comments.map((comment) => (
-                          <div
-                            key={comment.id}
-                            style={{
-                              marginBottom: "5px",
-                              fontSize: "0.85em",
-                            }}
-                          >
-                            <strong>{comment.user}:</strong> {comment.text}
-                            <span
-                              style={{
-                                fontSize: "0.7em",
-                                color: "#555",
-                                marginLeft: "5px",
-                              }}
-                            >
-                              ({comment.created_at})
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    <form
-                      onSubmit={(e) => handleCommentSubmit(e, post.id)}
-                    >
-                      <input
-                        type="text"
-                        value={commentInputs[post.id] || ""}
-                        onChange={(e) =>
-                          handleCommentChange(post.id, e.target.value)
-                        }
-                        placeholder="Add a comment..."
+                    {post.images.map((image, imgIndex) => (
+                      <img
+                        key={imgIndex}
+                        src={image.image}
+                        alt={`Post ${post.id}`}
                         style={{
-                          width: "100%",
-                          padding: "6px 8px",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
-                          fontSize: "0.9em",
+                          width: "400px",
+                          height: "300px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
                         }}
                       />
-                    </form>
+                    ))}
                   </div>
-                  {/* Delete button visible only for the post owner */}
-                  {currentUser === post.user && (
+                  {/* Caption, Username & Timestamp */}
+                  <div className="mt-2 text-center">
+                    <p className="text-gray-700 text-sm">{post.caption}</p>
+                    <p className="text-xs text-gray-500">
+                      Posted by {post.user} on {post.created_at}
+                    </p>
+                    {/* Like Button */}
                     <button
-                      onClick={() => handleDelete(post.id)}
+                      onClick={() => handleLike(post.id)}
                       style={{
                         marginTop: "5px",
                         padding: "5px 10px",
-                        backgroundColor: "#e3342f",
+                        backgroundColor: post.is_liked ? "#ff5c5c" : "#007bff",
                         color: "#fff",
                         border: "none",
                         borderRadius: "5px",
                         cursor: "pointer",
                       }}
+                      title="Like/Unlike"
                     >
-                      Delete Post
+                      {post.is_liked ? "Unlike" : "Like"} ({post.likes_count})
                     </button>
-                  )}
+
+                    {/* Comments Section */}
+                    <div className="mt-3">
+                      {post.comments && post.comments.length > 0 && (
+                        <div
+                          style={{ textAlign: "left", marginBottom: "10px" }}
+                        >
+                          {post.comments.map((comment) => (
+                            <div
+                              key={comment.id}
+                              style={{
+                                marginBottom: "5px",
+                                fontSize: "0.85em",
+                              }}
+                            >
+                              <strong>{comment.user}:</strong> {comment.text}
+                              <span
+                                style={{
+                                  fontSize: "0.7em",
+                                  color: "#555",
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                ({comment.created_at})
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                      <form onSubmit={(e) => handleCommentSubmit(e, post.id)}>
+                        <input
+                          type="text"
+                          value={commentInputs[post.id] || ""}
+                          onChange={(e) =>
+                            handleCommentChange(post.id, e.target.value)
+                          }
+                          placeholder="Add a comment..."
+                          style={{
+                            width: "100%",
+                            padding: "6px 8px",
+                            border: "1px solid #ddd",
+                            borderRadius: "4px",
+                            fontSize: "0.9em",
+                          }}
+                        />
+                      </form>
+                    </div>
+                    {/* Delete button visible only for the post owner */}
+                    {currentUser === post.user && (
+                      <button
+                        onClick={() => handleDelete(post.id)}
+                        style={{
+                          marginTop: "5px",
+                          padding: "5px 10px",
+                          backgroundColor: "#e3342f",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "5px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Delete Post
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
+        {/* Left empty div for image */}
+        <div style={{ width: "200px" }}>Hello</div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import logo from "/logo6.png";
 import cat1 from "/cat1Logo.png";
 import cat2 from "/cat2Logo.png";
 import ball from "/ballLogo.png";
+import Sidebar from "./Sidebar";
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
@@ -28,6 +29,7 @@ const UserInfo = () => {
   return (
     <div>
       <div>
+        
         <img
           src={ball}
           alt="ball"
@@ -37,6 +39,7 @@ const UserInfo = () => {
       </div>
       <div className="d-flex align-items-center">
         {/* Left empty div for image */}
+        
         <div style={{ width: "200px" }}>
           <img
             src={cat1}

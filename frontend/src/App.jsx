@@ -11,6 +11,7 @@ import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
 import More from "./Components/More";
 import Layout from "./Components/Layout";
+import Sidebar from "./Components/Sidebar";
 import "./App.css";
 
 function App() {
@@ -27,7 +28,7 @@ function App() {
         { path: "/userinfo", element: <User /> },
         { path: "/userquery", element: <UserQuery /> },
         { path: "/edit", element: <Edit /> },
-        { path: "/more", element: <More /> },
+        { path: "/more", element: <More/> },
       ],
     },
   ]);
