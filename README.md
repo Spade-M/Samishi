@@ -45,8 +45,8 @@ Welcome to **Samishi** – the ultimate social media platform where cat owners c
 1. **Clone the repository:**
 
    ```bash
-   git clone [https://github.com/your-username/catchatter.git](https://github.com/your-username/catchatter.git)
-   cd catchatter/frontend
+   git clone https://github.com/Spade-M/Samishi.git
+   cd Samishi/frontend
    ```
 
 2. **Install dependencies:**
