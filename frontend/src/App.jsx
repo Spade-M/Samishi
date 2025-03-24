@@ -11,6 +11,7 @@ import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
 import More from "./Components/More";
 import Layout from "./Components/Layout";
+import Facts from "./Components/Facts";
 import Sidebar from "./Components/Sidebar";
 import "./App.css";
 
@@ -22,6 +23,7 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
+        { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
         { path: "/login", element: <Login /> },
         { path: "/SignUp", element: <SignUp /> },

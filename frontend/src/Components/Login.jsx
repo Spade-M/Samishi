@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import logo from "/logo3.png";
 import cat1 from "/playingLogo.png";
+import Footer from "./Footer";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -117,6 +118,10 @@ const Login = () => {
             className="img-fluid"
             style={{ width: "250px", left: "-70%", bottom : " 70px"  ,position: "relative " , rotate: "-48deg"}}  
           ></img>
+      </div>
+      
+      <div style={{ backgroundColor: "rgba(104, 123, 230, 0.5)", padding: "10px" }}>
+        
       </div>
     </div>
   );

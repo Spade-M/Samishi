@@ -958,12 +958,17 @@ export default Footer
         </p>
       </div>
 
-      <div>
-        <img src={Logo1} className="logo" alt="Cat logo" />
-      </div>
-      <pre>{message1}</pre>
-      
-      <pre>{message2}</pre>
-      
-      <pre>{message3}</pre>
+import React from "react";
+import { useRouteError } from "react-router-dom";
 
+const ErrorPage = () => {
+  const error = useRouteError();
+  return (
+    <div>
+      <h1>Oops! Page Not Found</h1>
+      <p>{error?.message || "Something went wrong!"}</p>
+    </div>
+  );
+};
+
+export default ErrorPage;

@@ -1,3 +1,4 @@
+import { color } from 'framer-motion';
 import React from 'react'
 
 const Footer = () => {
@@ -10,6 +11,7 @@ const Footer = () => {
           <a href="/" className="hover:text-gray-400 transition px-3">Home</a>
           <a href="/about" className="hover:text-gray-400 transition px-3">About</a>
           <a href="/contact" className="hover:text-gray-400 transition px-3">Contact Us</a>
+          <a href="/facts" className="hover:text-gray-400 transition px-3">Cat Facts</a>
           <a href="/faq" className="hover:text-gray-400 transition px-3">FAQ</a>
         </nav>
         
@@ -26,7 +28,17 @@ const Footer = () => {
     </footer>
     </div>
   )
-}
+};
+
+const styles = {
+  carouselContainer: {
+    color: "white",
+  },
+  a: {
+    color:"rgb(189, 134, 172)", /* DodgerBlue */
+
+  },
+};
 
 export default Footer
 

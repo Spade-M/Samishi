@@ -37,10 +37,9 @@ const Header = () => {
   return (
     <div>
       <nav className="navbar navbar-pink bg-pink fixed-top">
-        <div className="container-fluid" >
-          <a className="navbar-brand" href="/" >
+        <div className="container-fluid">
+          <a className="navbar-brand" href="/">
             {/* Insert your brand/logo here */}
-          
           </a>
           <button
             className="navbar-toggler"
@@ -68,13 +67,6 @@ const Header = () => {
             </div>
             <div className="offcanvas-body">
               <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                {!isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/">
-                      Home
-                    </a>
-                  </li>
-                )}
                 {isLoggedIn && (
                   <li className="nav-item">
                     <a className="nav-link" href="/posts">
@@ -82,29 +74,30 @@ const Header = () => {
                     </a>
                   </li>
                 )}
-                <li className="nav-item">
-                  <a className="nav-link" href="/about">
-                    About Us
-                  </a>
-                </li>
-                
+
                 {isLoggedIn && (
                   <li className="nav-item">
-                    <a className="nav-link" href="/userinfo">
-                      User Information
+                    <a className="nav-link active" aria-current="page" href="/facts">
+                      Cats Facts
                     </a>
                   </li>
                 )}
-                <li className="nav-item">
-                  <a className="nav-link" href="/userquery">
-                    User Query
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/more">
-                    More About Cats
-                  </a>
-                </li>
+
+                {isLoggedIn && (
+                  <li className="nav-item">
+                    <a className="nav-link active" aria-current="page" href="/about">
+                      About Us
+                    </a>
+                  </li>
+                )}
+
+                {isLoggedIn && (
+                  <li className="nav-item">
+                    <a className="nav-link" href="/userinfo">
+                      User Info
+                    </a>
+                  </li>
+                )}
               </ul>
               <br />
               {isLoggedIn && (

@@ -235,14 +235,12 @@ const Home = () => {
       <br />
       <br />
      <pre>{message3}</pre>
-      <Popover content={content} title="Title">
-        <Button type="primary">Hover me</Button>
-      </Popover>
-      <Skeleton />
+      
+      
       <br />
       <div
         style={{
-          backgroundColor: "rgb(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(104, 123, 230, 0.5)",
           padding: "10px",  
         }}
       >

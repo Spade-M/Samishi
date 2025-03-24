@@ -99,7 +99,7 @@ const AboutUs = () => {
       <pre>{message3}</pre>
       <div
         style={{
-          backgroundColor: "rgb(0, 0, 0, 0.5)",
+          backgroundColor: "rgba(104, 123, 230, 0.5)",
           padding: "10px",
         }}
       >
