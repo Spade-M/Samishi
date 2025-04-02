@@ -24,7 +24,8 @@ const Facts = () => {
 
   return (
     <div>
-      <br />
+      <br /><br />
+      <br /><br />
       <h2>🐾 "Curious about cats? We’ve got all the pawsome facts!"</h2>
       <br />
       <h5>🐾 "Unleashing knowledge, one paw at a time!"</h5>

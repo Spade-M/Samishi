@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Logo from "/logo.png";
 import axios from "axios";
 
 const Header = () => {
@@ -36,82 +37,70 @@ const Header = () => {
 
   return (
     <div>
-      <nav className="navbar navbar-pink bg-pink fixed-top">
+      <nav
+        className="navbar navbar-pink bg-pink fixed-top"
+        style={{ backgroundColor: "rgb(255, 236, 195)" }} // Set pink background here
+      >
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
             {/* Insert your brand/logo here */}
+            <img
+              src={Logo}
+              alt="Logo"
+              width="40"
+              height="40"
+              className="d-inline-block align-text-top"
+              // Set pink background here
+            />
           </a>
+          <ul className="nav justify-content-end flex-grow-1 pe-3">
+            <li className="nav-item">
+              <a
+                className="nav-link text-black"
+                aria-current="Posts"
+                href="/posts"
+              >
+                Posts
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link text-black "
+                aria-current="Cat Facts"
+                href="/facts"
+              >
+                Cats Facts
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link text-black"
+                aria-current="About us"
+                href="/about"
+              >
+                About Us
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link text-black"
+                aria-current="User Info"
+                href="/userinfo"
+              >
+                User Info
+              </a>
+            </li>
+          </ul>
           <button
-            className="navbar-toggler"
+            style={{ backgroundColor: "rgb(255, 236, 195)" ,
+            color: "black"
+          
+            }}
             type="button"
-            data-bs-toggle="offcanvas"
-            data-bs-target="#offcanvasLightNavbar"
-            aria-controls="offcanvasLightNavbar"
-            aria-label="Toggle navigation"
+            onClick={handleLogout}
           >
-            <span className="navbar-toggler-icon"></span>
+            Logout
           </button>
-          <div
-            className="offcanvas offcanvas-end"
-            id="offcanvasLightNavbar"
-            aria-labelledby="offcanvasLightPinkNavbarLabel"
-            style={{ backgroundColor: "#eaa9ee" }} // Set pink background here
-          >
-            <div className="offcanvas-header">
-              <button
-                type="button"
-                className="btn-close btn-close-white"
-                data-bs-dismiss="offcanvas"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="offcanvas-body">
-              <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
-                {isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link" href="/posts">
-                      Posts
-                    </a>
-                  </li>
-                )}
-
-                {isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/facts">
-                      Cats Facts
-                    </a>
-                  </li>
-                )}
-
-                {isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link active" aria-current="page" href="/about">
-                      About Us
-                    </a>
-                  </li>
-                )}
-
-                {isLoggedIn && (
-                  <li className="nav-item">
-                    <a className="nav-link" href="/userinfo">
-                      User Info
-                    </a>
-                  </li>
-                )}
-              </ul>
-              <br />
-              {isLoggedIn && (
-                <button
-                  className="btn btn-danger"
-                  type="button"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
-              )}
-              <br />
-            </div>
-          </div>
         </div>
       </nav>
     </div>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import cat1 from "/peakingLogo.png";
+import like from "/likeemo1.png";
+import unlike from "/likeemo2.png";
 import Sidebar from "./Sidebar";
 
 const API_URL = "http://localhost:8000/api";
@@ -210,8 +212,10 @@ const Posts = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-3">
-      
+    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-10">
+      <br />
+      <br />
+      <br />
       <div
         style={{
           width: "100px",
@@ -417,7 +421,7 @@ const Posts = () => {
       <div className="d-flex align-items-center">
         {/* Left empty div for image */}
         <div style={{ width: "200px", backgroundColor: "red" }}>
-          <Sidebar/>
+          hello
         </div>
 
         {/* Feed */}
@@ -478,7 +482,7 @@ const Posts = () => {
                   </div>
                   {/* Caption, Username & Timestamp */}
                   <div className="mt-2 text-center">
-                    <p className="text-gray-700 text-sm">{post.caption}</p>
+                    <p className="text-bold-700 text-sm">{post.caption}</p>
                     <p className="text-xs text-gray-500">
                       Posted by {post.user} on {post.created_at}
                     </p>
@@ -488,15 +492,25 @@ const Posts = () => {
                       style={{
                         marginTop: "5px",
                         padding: "5px 10px",
-                        backgroundColor: post.is_liked ? "#ff5c5c" : "#007bff",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
+                        backgroundColor: post.is_liked ? "#f6d4f7" : "#f6d4f7",
+                        color: "black",
                         cursor: "pointer",
                       }}
                       title="Like/Unlike"
                     >
-                      {post.is_liked ? "Unlike" : "Like"} ({post.likes_count})
+                      {post.is_liked ? 
+                      <img
+                        src={like}
+                        alt="Unlike"
+                        width="40px"
+                        
+                      />
+                       : 
+                       <img
+                        src={unlike}
+                        alt="Like"
+                        width="40px"
+                      />}  ({post.likes_count})
                     </button>
 
                     {/* Comments Section */}

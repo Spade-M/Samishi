@@ -12,8 +12,11 @@ import Edit from "./Components/EditInfo";
 import More from "./Components/More";
 import Layout from "./Components/Layout";
 import Facts from "./Components/Facts";
-import Sidebar from "./Components/Sidebar";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import contact from "./Components/Contact";
 import "./App.css";
+import Contact from "./Components/Contact";
 
 function App() {
   // Create a router that uses the Layout component as a wrapper for your routes
@@ -23,6 +26,7 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
+        {path: "/contact", element: <Contact /> },
         { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
         { path: "/login", element: <Login /> },
@@ -35,9 +39,29 @@ function App() {
     },
   ]);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check user authentication status when the component mounts
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/user/", { withCredentials: true })
+      .then((response) => {
+        // If the request is successful, the user is authenticated
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        // If the request fails (e.g., 401 Unauthorized), the user is not logged in
+        console.error("User is not logged in:", error);
+        setIsLoggedIn(false);
+      });
+  }, []);
+
+
   return (
     <>
+    {isLoggedIn && (
       <Header />
+    )}
       <RouterProvider router={router} />
     </>
   );

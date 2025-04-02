@@ -28,6 +28,8 @@ const UserInfo = () => {
 
   return (
     <div>
+      
+      <br />
       <div>
         
         <img

@@ -25,6 +25,8 @@ const AboutUs = () => {
   return (
     <div>
       <br />
+      <br />
+      <br />
       <div className="title">
         <h1>
           <SplitText
