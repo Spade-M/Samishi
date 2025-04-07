@@ -1,12 +1,47 @@
-Want to add? (Select at most 2)
+Want to add? (Select at most 3)
 
-Profile pics(Y/N) = ???
-Tagging feature(Y/N) = ???
-Notifications(Y/N) = ???
-Following / Follower System = ???
+Profile pics easiest to implement (Y/N) = ??? approved
+Tagging feature(Y/N) = ??? can only be seen once the website is live so not a good thing to test rn
+Notifications(Y/N) = ??? approved
+Following / Follower System(Beri complex i die) = ??? ye, i can understand, no needd for that much complexion
+Liked by list = ??? will be needing later but not now
+Comment replies = ???
+OTP verification for password reset (Lil challengeing but cool n fun [this one i personally intresed in coz ankit made similar thing]) = ??? approved, but gotta register user with real mail or number, ofcourse
+can try
+one more thing
+the adoption center option - need to make it 
+so the idea is to make post there only by admin of the website for apdoption for animals, main focus that i was trtying to figure out
+??
+just like each user can post 
+u just want page similar to posts page but there only a certain user can post?
+right,
+ like the superuser or admin or staff
+
+ lol  ez
+ will just hide create post 
+ i did that 
+ but problem is that it should store posts in diffrernt place not with outer posts
+ yeye i got ito
+
+ ill create a seperate folder 
+ thta swhat i implemented but due to confilt it all disappered
+ its still there
+
+brb 2 mins kk
+
+
+
+threr is a isue ??
 
 reccomend connecting anydesk when switching to new backend, else
 email at sinhasarthak56@gmail.com if thy shall encounter any mishappenings.
+m contact page is gone ig
+ye i had to delete coz conflict ok
+i started working ay 9pm so after that if u did anything its not here
+
+i tried to merge but u saw it was giving errors
+i see, i will rebuilt that again
+pls test multiple user comment i havent tested ok
 my header is missing
 it here in min 
 lemme copy paste my code github meesed it up merge gay
