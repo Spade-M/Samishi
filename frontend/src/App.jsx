@@ -17,6 +17,7 @@ import Adoption from "./Components/Adoption";
 import axios from "axios";
 import "./App.css";
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -49,7 +50,6 @@ function App() {
         { path: "/contact", element: <Contact /> },
         { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
-        { path: "/adoption", element: <Adoption /> },
         { path: "/login", element: <Login /> },
         { path: "/signup", element: <SignUp /> },
         { path: "/userinfo", element: <User /> },
@@ -59,6 +59,23 @@ function App() {
       ],
     },
   ]);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check user authentication status when the component mounts
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/user/", { withCredentials: true })
+      .then((response) => {
+        // If the request is successful, the user is authenticated
+        setIsLoggedIn(true);
+      })
+      .catch((error) => {
+        // If the request fails (e.g., 401 Unauthorized), the user is not logged in
+        console.error("User is not logged in:", error);
+        setIsLoggedIn(false);
+      });
+  }, []);
 
   return (
     <>
