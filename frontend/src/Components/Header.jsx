@@ -88,7 +88,7 @@ const Header = () => {
               <a
                 className="nav-link text-black"
                 aria-current="About us"
-                href="/adoption"
+                href="/about"
               >
                 Adoption Center
               </a>
