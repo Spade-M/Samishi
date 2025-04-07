@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Header from "./Components/Header";
 import Home from "./Components/Home";
@@ -12,50 +12,29 @@ import Edit from "./Components/EditInfo";
 import More from "./Components/More";
 import Layout from "./Components/Layout";
 import Facts from "./Components/Facts";
-import Contact from "./Components/Contact";
-import Adoption from "./Components/Adoption";
+import { useState, useEffect } from "react";
 import axios from "axios";
+import contact from "./Components/Contact";
 import "./App.css";
-
+import Contact from "./Components/Contact";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      setIsLoggedIn(false);
-      return;
-    }
-
-    axios
-      .get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
-      .then(() => setIsLoggedIn(true))
-      .catch((error) => {
-        console.error("User is not logged in:", error);
-        setIsLoggedIn(false);
-      });
-  }, []);
-
+  // Create a router that uses the Layout component as a wrapper for your routes
   const router = createBrowserRouter([
     {
       element: <Layout />,
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
-        { path: "/contact", element: <Contact /> },
+        {path: "/contact", element: <Contact /> },
         { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
         { path: "/login", element: <Login /> },
-        { path: "/signup", element: <SignUp /> },
+        { path: "/SignUp", element: <SignUp /> },
         { path: "/userinfo", element: <User /> },
         { path: "/userquery", element: <UserQuery /> },
         { path: "/edit", element: <Edit /> },
-        { path: "/more", element: <More /> },
+        { path: "/more", element: <More/> },
       ],
     },
   ]);
@@ -79,7 +58,9 @@ function App() {
 
   return (
     <>
-      {isLoggedIn && <Header />}
+    {isLoggedIn && (
+      <Header />
+    )}
       <RouterProvider router={router} />
     </>
   );
