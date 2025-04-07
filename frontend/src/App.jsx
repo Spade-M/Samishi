@@ -14,9 +14,9 @@ import Layout from "./Components/Layout";
 import Facts from "./Components/Facts";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import contact from "./Components/Contact";
 import "./App.css";
-import Contact from "./Components/Contact";
+import Contact from "./Components/Contact"
+import Adoption from "./Components/Adoption";
 
 function App() {
   // Create a router that uses the Layout component as a wrapper for your routes
@@ -29,6 +29,7 @@ function App() {
         {path: "/contact", element: <Contact /> },
         { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
+        { path: "/adoption", element: <Adoption /> },
         { path: "/login", element: <Login /> },
         { path: "/SignUp", element: <SignUp /> },
         { path: "/userinfo", element: <User /> },
