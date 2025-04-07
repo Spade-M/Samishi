@@ -3,7 +3,7 @@ import axios from "axios"; // Using the token-enabled axios instance
 import cat1 from "/peakingLogo.png";
 import like from "/likeemo1.png";
 import unlike from "/likeemo2.png";
-import Sidebar from "./Sidebar";
+
 
 
 const API_URL = "http://localhost:8000/api";
