@@ -1,5 +1,5 @@
 import React from "react";
-import "./user.css"; // Import CSS for styling scrollbar
+ // Import CSS for styling scrollbar
 
 const cats = [
   { name: "Grisù", age: "5 mesi", gender: "Maschio", fur: "Medio", location: "Bergamo", image: "/cat1.jpg" },
