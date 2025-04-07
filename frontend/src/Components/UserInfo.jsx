@@ -12,9 +12,18 @@ const UserInfo = () => {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("No token found. Please log in.");
+          return;
+        }
+
         const response = await axios.get("http://localhost:8000/api/user/", {
-          withCredentials: true, // Ensure cookies are sent
+          headers: {
+            Authorization: `Token ${token}`,
+          },
         });
+
         setUser(response.data);
       } catch (err) {
         setError("Failed to fetch user data.");
@@ -27,27 +36,19 @@ const UserInfo = () => {
 
   return (
     <div>
-      
       <br />
       <div>
-        
         <img
           src={ball}
           alt="ball"
           className="img-fluid"
-          style={{ width: "100px" , top: "-60px", left: "25%", position: "relative"}}
+          style={{ width: "100px", top: "-60px", left: "25%", position: "relative" }}
         />
       </div>
+
       <div className="d-flex align-items-center">
-        {/* Left empty div for image */}
-        
         <div style={{ width: "200px" }}>
-          <img
-            src={cat1}
-            alt="Peeking Cat"
-            className="img-fluid"
-            style={{ width: "200px" }}
-          ></img>
+          <img src={cat1} alt="Peeking Cat" className="img-fluid" style={{ width: "200px" }} />
         </div>
 
         <div
@@ -69,17 +70,15 @@ const UserInfo = () => {
               transform: "translateX(-50%)",
             }}
           >
-            <img
-              src={logo}
-              alt="Peeking Cat"
-              className="img-fluid"
-              style={{ width: "100px" }}
-            />
+            <img src={logo} alt="Peeking Cat" className="img-fluid" style={{ width: "100px" }} />
           </div>
+
           <br />
           <h2 className="text-center mt-5">User Information</h2>
           <br />
+
           {error && <p className="text-danger text-center">{error}</p>}
+
           {user ? (
             <div className="text-center">
               <p>
@@ -90,8 +89,9 @@ const UserInfo = () => {
               </p>
             </div>
           ) : (
-            <p className="text-center">Loading user info...</p>
+            !error && <p className="text-center">Loading user info...</p>
           )}
+
           <div className="text-center mt-3">
             <a href="/edit">
               <button>Edit Info</button>
@@ -99,14 +99,8 @@ const UserInfo = () => {
           </div>
         </div>
 
-        {/* Right empty div for image */}
         <div style={{ width: "200px" }}>
-          <img
-            src={cat2}
-            alt="Peeking Cat"
-            className="img-fluid"
-            style={{ width: "200px" }}
-          ></img>
+          <img src={cat2} alt="Peeking Cat" className="img-fluid" style={{ width: "200px" }} />
         </div>
       </div>
     </div>

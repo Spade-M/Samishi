@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utils/api"; // Using the token-enabled axios instance
 import logo from "/logo3.png";
 import cat1 from "/playingLogo.png";
 import Footer from "./Footer";
@@ -16,15 +16,16 @@ const Login = () => {
     setSuccess(false);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8000/api/login/",
-        { username, password },
-        { withCredentials: true } // Include cookies for session authentication
-      );
+      const response = await api.post("login/", { username, password });
 
-      console.log("Login successful!", response.data);
+      // Store token for future authenticated requests
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+      console.log("Token stored:", token);
+      
+
       setSuccess(true);
-      // Redirect to Posts.jsx page after login
+      // Redirect to posts page
       window.location.href = "/posts";
     } catch (error) {
       if (error.response) {
@@ -55,7 +56,7 @@ const Login = () => {
           src={logo}
           alt="Peeking Cat"
           className="img-fluid"
-          style={{ width: "100px"}}
+          style={{ width: "100px" }}
         />
       </div>
       <div
@@ -97,10 +98,11 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit">Login</button>
-          <p className="or">
-            or
-            <br />
+          <button type="submit" className="btn btn-primary w-100">
+            Login
+          </button>
+          <p className="or text-center mt-3">
+            or<br />
             <a href="/SignUp">Sign Up</a>
           </p>
           {error && <p className="text-danger mt-2 text-center">{error}</p>}
@@ -109,20 +111,28 @@ const Login = () => {
           )}
         </form>
       </div>
-      <div>
 
-        
-      <img
-            src={cat1}
-            alt="Playing Cat"
-            className="img-fluid"
-            style={{ width: "250px", left: "-70%", bottom : " 70px"  ,position: "relative " , rotate: "-48deg"}}  
-          ></img>
+      <div>
+        <img
+          src={cat1}
+          alt="Playing Cat"
+          className="img-fluid"
+          style={{
+            width: "250px",
+            left: "-70%",
+            bottom: "70px",
+            position: "relative",
+            rotate: "-48deg",
+          }}
+        />
       </div>
-      
-      <div style={{ backgroundColor: "rgba(104, 123, 230, 0.5)", padding: "10px" }}>
-        
-      </div>
+
+      <div
+        style={{
+          backgroundColor: "rgba(104, 123, 230, 0.5)",
+          padding: "10px",
+        }}
+      ></div>
     </div>
   );
 };

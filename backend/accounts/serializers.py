@@ -1,10 +1,12 @@
 from rest_framework import serializers
 from .models import Post, PostImage, Like, Comment
 
+
 class PostImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostImage
         fields = ['id', 'image']
+
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username", read_only=True)
@@ -13,6 +15,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'user', 'text', 'created_at']
+
 
 class PostSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.username", read_only=True)
@@ -37,3 +40,9 @@ class PostSerializer(serializers.ModelSerializer):
         if request and hasattr(request, "user"):
             return obj.likes.filter(user=request.user).exists()
         return False
+
+
+class PostCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ['caption']  # Only for creation; images are handled separately
