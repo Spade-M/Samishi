@@ -15,7 +15,7 @@ import Facts from "./Components/Facts";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
-import Contact from "./Components/Contact"
+import Contact from "./Components/Contact";
 import Adoption from "./Components/Adoption";
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
       children: [
         { path: "/", element: <Home /> },
         { path: "/about", element: <AboutUs /> },
-        {path: "/contact", element: <Contact /> },
+        { path: "/contact", element: <Contact /> },
         { path: "/facts", element: <Facts /> },
         { path: "/posts", element: <Posts /> },
         { path: "/adoption", element: <Adoption /> },
@@ -35,7 +35,7 @@ function App() {
         { path: "/userinfo", element: <User /> },
         { path: "/userquery", element: <UserQuery /> },
         { path: "/edit", element: <Edit /> },
-        { path: "/more", element: <More/> },
+        { path: "/more", element: <More /> },
       ],
     },
   ]);
@@ -57,12 +57,9 @@ function App() {
       });
   }, []);
 
-
   return (
     <>
-    {isLoggedIn && (
-      <Header />
-    )}
+      {isLoggedIn && <Header />}
       <RouterProvider router={router} />
     </>
   );
