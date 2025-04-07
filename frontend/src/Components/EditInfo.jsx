@@ -8,20 +8,9 @@ const EditInfo = () => {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
-    if (!token) {
-      setMessage("You must be logged in.");
-      return;
-    }
-
     axios
-      .get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
-      })
+      .get("http://localhost:8000/api/user/", { withCredentials: true })
       .then((response) => {
         setUsername(response.data.username);
         setEmail(response.data.email);
@@ -30,20 +19,15 @@ const EditInfo = () => {
         console.error("Error fetching user details:", error);
         setMessage("Error fetching user details.");
       });
-  }, [token]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     axios
       .put(
         "http://localhost:8000/api/user/",
         { username, email, password },
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
+        { withCredentials: true }
       )
       .then((response) => {
         setMessage(response.data.message || "User updated successfully.");
@@ -65,14 +49,9 @@ const EditInfo = () => {
   const handleDelete = () => {
     if (window.confirm("Are you sure you want to delete your account?")) {
       axios
-        .delete("http://localhost:8000/api/user/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        })
+        .delete("http://localhost:8000/api/user/", { withCredentials: true })
         .then((response) => {
           setMessage(response.data.message || "User deleted successfully.");
-          localStorage.removeItem("token");
           window.location.href = "/";
         })
         .catch((error) => {
@@ -155,12 +134,10 @@ const EditInfo = () => {
           </div>
           <br />
           <div className="text-center">
-            <button
-              type="submit"
-              style={{ backgroundColor: "#4CB7A5" }}
-              id="save"
-              className="me-2"
-            >
+            <button type="submit"
+            style={{ backgroundColor: "#4CB7A5" }}
+            id="save"
+              className="me-2">
               Save Changes
             </button>
             <button
@@ -175,7 +152,7 @@ const EditInfo = () => {
             <button
               type="button"
               id="delete"
-              style={{ backgroundColor: "#C2185B" }}
+              style={{ backgroundColor: "#C2185B"}}
               onClick={handleDelete}
             >
               Delete User

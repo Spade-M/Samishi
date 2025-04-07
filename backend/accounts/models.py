@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Post(models.Model):
-    class Meta:
-        ordering = ['-created_at']
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     caption = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,7 +16,7 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to="posts/")
 
     def __str__(self):
-        return f"Image for Post {self.post.id} by {self.post.user.username}"
+        return f"Image for {self.post.id}"
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -30,11 +28,6 @@ class Like(models.Model):
 
     def __str__(self):
         return f"{self.user.username} likes Post {self.post.id}"
-    
-    def total_likes(self):
-        return self.likes.count()
-
-
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -44,6 +37,3 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.user.username} on Post {self.post.id}"
-    
-    def total_comments(self):
-        return self.comments.count()
