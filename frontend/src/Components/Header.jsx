@@ -53,6 +53,9 @@ const Header = () => {
               // Set pink background here
             />
           </a>
+          <h4 className="navbar-text" style={{ color: "purple" }}>
+            Samishi Community
+          </h4>
           <ul className="nav justify-content-end flex-grow-1 pe-3">
             <li className="nav-item">
               <a
@@ -79,6 +82,15 @@ const Header = () => {
                 href="/about"
               >
                 About Us
+              </a>
+            </li>
+            <li className="nav-item">
+              <a
+                className="nav-link text-black"
+                aria-current="About us"
+                href="/about"
+              >
+                Adoption Center
               </a>
             </li>
             <li className="nav-item">

@@ -4,7 +4,6 @@ import logo from "/logo6.png";
 import cat1 from "/cat1Logo.png";
 import cat2 from "/cat2Logo.png";
 import ball from "/ballLogo.png";
-import Sidebar from "./Sidebar";
 
 const UserInfo = () => {
   const [user, setUser] = useState(null);
