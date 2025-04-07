@@ -1,0 +1,6 @@
+Want to add? (Select at most 2)
+
+Profile pics(Y/N) = ???
+Tagging feature(Y/N) = ???
+Notifications(Y/N) = ???
+Following / Follower System = ???

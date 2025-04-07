@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "axios"; // Using the token-enabled axios instance
 import cat1 from "/peakingLogo.png";
 import like from "/likeemo1.png";
 import unlike from "/likeemo2.png";
+
 
 
 const API_URL = "http://localhost:8000/api";
@@ -16,11 +17,13 @@ const Posts = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  // For comment inputs, keyed by post id
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [commentInputs, setCommentInputs] = useState({});
 
-  // Clear notifications after 3 seconds
+  const token = localStorage.getItem("token");
+  const authHeaders = token ? { Authorization: `Token ${token}` } : {};
+
+
   useEffect(() => {
     if (errorMessage || successMessage) {
       const timer = setTimeout(() => {
@@ -31,26 +34,24 @@ const Posts = () => {
     }
   }, [errorMessage, successMessage]);
 
-  // Fetch posts and user info on mount
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/posts/`, {
-          withCredentials: true,
-        });
-        setPosts(response.data);
-      } catch (error) {
-        console.error("Error fetching posts", error);
-        setErrorMessage("Error fetching posts.");
+        const response = await axios.get(`${API_URL}/posts/`, { headers: authHeaders });
+        console.log("Fetched posts:", response.data.results);
+        setPosts(response.data.results);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+        setErrorMessage("Failed to load posts.");
       } finally {
-        setLoading(false);
+        setLoading(false); // Make sure loading is stopped
       }
     };
-
+  
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/user/`, {
-          withCredentials: true,
+          headers: authHeaders,
         });
         setCurrentUser(res.data.username);
       } catch (error) {
@@ -58,10 +59,12 @@ const Posts = () => {
         setErrorMessage("Error fetching user info.");
       }
     };
-
+  
     fetchPosts();
     fetchUser();
   }, []);
+  
+  
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -79,8 +82,6 @@ const Posts = () => {
           }
         };
         reader.readAsDataURL(file);
-      } else {
-        console.warn("File is not an image:", file.name);
       }
     });
 
@@ -90,14 +91,9 @@ const Posts = () => {
     }
   };
 
-  // Function to remove a selected image
   const handleRemoveImage = (indexToRemove) => {
-    const updatedFiles = selectedFiles.filter(
-      (_, index) => index !== indexToRemove
-    );
-    const updatedPreviews = imagePreviews.filter(
-      (_, index) => index !== indexToRemove
-    );
+    const updatedFiles = selectedFiles.filter((_, index) => index !== indexToRemove);
+    const updatedPreviews = imagePreviews.filter((_, index) => index !== indexToRemove);
     setSelectedFiles(updatedFiles);
     setImagePreviews(updatedPreviews);
   };
@@ -107,20 +103,12 @@ const Posts = () => {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // Client-side validation:
     if (selectedFiles.length === 0) {
       setErrorMessage("Please select at least one image file.");
       return;
     }
     if (!caption.trim()) {
       setErrorMessage("Please enter a caption for your post.");
-      return;
-    }
-    const invalidFiles = selectedFiles.filter(
-      (file) => !file.type.startsWith("image/")
-    );
-    if (invalidFiles.length > 0) {
-      setErrorMessage("One or more selected files are not valid images.");
       return;
     }
 
@@ -132,30 +120,26 @@ const Posts = () => {
 
     try {
       const response = await axios.post(`${API_URL}/posts/`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-        withCredentials: true,
+        headers: { ...authHeaders, "Content-Type": "multipart/form-data" },
       });
-      // Prepend the new post to the feed
       setPosts([response.data, ...posts]);
       setSelectedFiles([]);
       setImagePreviews([]);
       setCaption("");
       setSuccessMessage("Post uploaded successfully!");
-      setIsModalOpen(false); // Close modal after successful upload
+      setIsModalOpen(false);
     } catch (error) {
       console.error("Error uploading post", error);
       setErrorMessage("Error uploading post. Please try again.");
     }
   };
 
-  // Like/Unlike a post
   const handleLike = async (postId) => {
     try {
-      // Assumes backend toggles like state and returns updated post data
       const response = await axios.post(
         `${API_URL}/posts/${postId}/like/`,
         {},
-        { withCredentials: true }
+        { headers: authHeaders }
       );
       const updatedPost = response.data;
       setPosts(posts.map((post) => (post.id === postId ? updatedPost : post)));
@@ -165,7 +149,6 @@ const Posts = () => {
     }
   };
 
-  // Handle comment submission for a specific post
   const handleCommentSubmit = async (event, postId) => {
     event.preventDefault();
     const commentText = commentInputs[postId] || "";
@@ -174,18 +157,16 @@ const Posts = () => {
       const response = await axios.post(
         `${API_URL}/posts/${postId}/comments/`,
         { text: commentText },
-        { withCredentials: true }
+        { headers: authHeaders }
       );
       const newComment = response.data;
       setPosts(
-        posts.map((post) => {
-          if (post.id === postId) {
-            return { ...post, comments: [...post.comments, newComment] };
-          }
-          return post;
-        })
+        posts.map((post) =>
+          post.id === postId
+            ? { ...post, comments: [...post.comments, newComment] }
+            : post
+        )
       );
-      // Clear comment input for this post
       setCommentInputs({ ...commentInputs, [postId]: "" });
     } catch (error) {
       console.error("Error adding comment", error);
@@ -193,15 +174,15 @@ const Posts = () => {
     }
   };
 
-  // Update comment input for a specific post
   const handleCommentChange = (postId, value) => {
     setCommentInputs({ ...commentInputs, [postId]: value });
   };
 
   const handleDelete = async (postId) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
       await axios.delete(`${API_URL}/posts/${postId}/`, {
-        withCredentials: true,
+        headers: authHeaders,
       });
       setPosts(posts.filter((post) => post.id !== postId));
       setSuccessMessage("Post deleted successfully!");
@@ -211,8 +192,32 @@ const Posts = () => {
     }
   };
 
+  const handleDeleteComment = async (postId, commentId) => {
+    if (!window.confirm("Are you sure you want to delete this comment?")) return;
+    try {
+      await axios.delete(`${API_URL}/posts/${postId}/comments/${commentId}/`, {
+        headers: authHeaders,
+      });
+      setPosts(
+        posts.map((post) =>
+          post.id === postId
+            ? {
+                ...post,
+                comments: post.comments.filter((comment) => comment.id !== commentId),
+              }
+            : post
+        )
+      );
+      setSuccessMessage("Comment deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting comment", error);
+      setErrorMessage("Error deleting comment.");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-10">
+      {/* rest of the component remains unchanged */}
       <br />
       <br />
       <br />
@@ -419,7 +424,6 @@ const Posts = () => {
       )}
 
       <div className="d-flex align-items-center">
-        {/* Left empty div for image */}
         <div style={{ width: "200px", backgroundColor: "red" }}>
           hello
         </div>
@@ -498,19 +502,12 @@ const Posts = () => {
                       }}
                       title="Like/Unlike"
                     >
-                      {post.is_liked ? 
-                      <img
-                        src={like}
-                        alt="Unlike"
-                        width="40px"
-                        
-                      />
-                       : 
-                       <img
-                        src={unlike}
-                        alt="Like"
-                        width="40px"
-                      />}  ({post.likes_count})
+                      {post.is_liked ? (
+                        <img src={like} alt="Unlike" width="40px" />
+                      ) : (
+                        <img src={unlike} alt="Like" width="40px" />
+                      )}{" "}
+                      ({post.likes_count})
                     </button>
 
                     {/* Comments Section */}
@@ -525,18 +522,44 @@ const Posts = () => {
                               style={{
                                 marginBottom: "5px",
                                 fontSize: "0.85em",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
                               }}
                             >
-                              <strong>{comment.user}:</strong> {comment.text}
-                              <span
-                                style={{
-                                  fontSize: "0.7em",
-                                  color: "#555",
-                                  marginLeft: "5px",
-                                }}
-                              >
-                                ({comment.created_at})
+                              <span>
+                                <strong>{comment.user}:</strong>{" "}
+                                {comment.text}{" "}
+                                <span
+                                  style={{
+                                    fontSize: "0.7em",
+                                    color: "#555",
+                                    marginLeft: "5px",
+                                  }}
+                                >
+                                  ({comment.created_at})
+                                </span>
                               </span>
+                              {comment.user === currentUser && (
+                                <button
+                                  onClick={() =>
+                                    handleDeleteComment(post.id, comment.id)
+                                  }
+                                  style={{
+                                    marginLeft: "10px",
+                                    backgroundColor: "#e3342f",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    padding: "2px 6px",
+                                    fontSize: "0.75em",
+                                  }}
+                                  title="Delete comment"
+                                >
+                                  Delete
+                                </button>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -582,7 +605,6 @@ const Posts = () => {
             </div>
           )}
         </div>
-        {/* Left empty div for image */}
         <div style={{ width: "200px" }}>Hello</div>
       </div>
     </div>
