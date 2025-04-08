@@ -7,6 +7,8 @@ const EditInfo = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   const token = localStorage.getItem("token");
 
@@ -18,47 +20,59 @@ const EditInfo = () => {
 
     axios
       .get("http://localhost:8000/api/user/", {
-        headers: {
-          Authorization: `Token ${token}`,
-        },
+        headers: { Authorization: `Token ${token}` },
       })
-      .then((response) => {
-        setUsername(response.data.username);
-        setEmail(response.data.email);
+      .then((res) => {
+        setUsername(res.data.username);
+        setEmail(res.data.email);
+        if (res.data.profile_picture) {
+          setPreviewUrl(res.data.profile_picture); // show current profile pic
+        }
       })
-      .catch((error) => {
-        console.error("Error fetching user details:", error);
+      .catch((err) => {
+        console.error("Error fetching user details:", err);
         setMessage("Error fetching user details.");
       });
   }, [token]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios
-      .put(
-        "http://localhost:8000/api/user/",
-        { username, email, password },
-        {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        }
-      )
-      .then((response) => {
-        setMessage(response.data.message || "User updated successfully.");
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.error("Error updating user details:", error);
-        setMessage("Error updating user details.");
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("email", email);
+    if (password) formData.append("password", password);
+    if (profilePic) formData.append("profile_picture", profilePic);
+
+    try {
+      const res = await axios.put("http://localhost:8000/api/user/", formData, {
+        headers: {
+          Authorization: `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
+      setMessage("User updated successfully.");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Error updating user:", error);
+      setMessage("Error updating user.");
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(file);
+      setPreviewUrl(URL.createObjectURL(file)); // show new preview
+    }
   };
 
   const handleClear = () => {
     setUsername("");
     setEmail("");
     setPassword("");
+    setProfilePic(null);
+    setPreviewUrl(null);
     setMessage("");
   };
 
@@ -66,17 +80,15 @@ const EditInfo = () => {
     if (window.confirm("Are you sure you want to delete your account?")) {
       axios
         .delete("http://localhost:8000/api/user/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+          headers: { Authorization: `Token ${token}` },
         })
-        .then((response) => {
-          setMessage(response.data.message || "User deleted successfully.");
+        .then((res) => {
+          setMessage("User deleted.");
           localStorage.removeItem("token");
           window.location.href = "/";
         })
-        .catch((error) => {
-          console.error("Error deleting user:", error);
+        .catch((err) => {
+          console.error("Error deleting user:", err);
           setMessage("Error deleting user.");
         });
     }
@@ -110,16 +122,40 @@ const EditInfo = () => {
             style={{ width: "100px" }}
           />
         </div>
+
         <h1 className="text-center mt-5">Edit Information</h1>
         <br />
-        {message && (
-          <div className="alert alert-info text-center">{message}</div>
-        )}
-        <form onSubmit={handleSubmit}>
+        {message && <div className="alert alert-info text-center">{message}</div>}
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
+          <div className="mb-3 text-center">
+            <label className="form-label"><strong>Profile Picture</strong></label>
+            <div>
+              <img
+                src={
+                  previewUrl ||
+                  "https://via.placeholder.com/100x100.png?text=No+Image"
+                }
+                alt="Profile"
+                className="rounded-circle mb-2"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  objectFit: "cover",
+                  border: "2px solid #ccc",
+                }}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                className="form-control mt-2"
+                onChange={handleImageChange}
+              />
+            </div>
+          </div>
+
           <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              <strong>Username</strong>
-            </label>
+            <label htmlFor="username" className="form-label"><strong>Username</strong></label>
             <input
               type="text"
               className="form-control"
@@ -128,10 +164,9 @@ const EditInfo = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              <strong>Email</strong>
-            </label>
+            <label htmlFor="email" className="form-label"><strong>Email</strong></label>
             <input
               type="email"
               className="form-control"
@@ -140,25 +175,23 @@ const EditInfo = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              <strong>Password</strong>
-            </label>
+            <label htmlFor="password" className="form-label"><strong>Password</strong></label>
             <input
               type="password"
               className="form-control"
               id="password"
-              placeholder="Enter new password if you want to change it"
+              placeholder="Enter new password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <br />
+
           <div className="text-center">
             <button
               type="submit"
               style={{ backgroundColor: "#4CB7A5" }}
-              id="save"
               className="me-2"
             >
               Save Changes
@@ -166,22 +199,19 @@ const EditInfo = () => {
             <button
               type="button"
               style={{ backgroundColor: "#FF6B6B" }}
-              id="clear"
-              className="me-2"
               onClick={handleClear}
+              className="me-2"
             >
               Clear
             </button>
             <button
               type="button"
-              id="delete"
               style={{ backgroundColor: "#C2185B" }}
               onClick={handleDelete}
             >
               Delete User
             </button>
           </div>
-          <br />
         </form>
       </div>
     </div>

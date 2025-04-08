@@ -4,9 +4,11 @@ import cat1 from "/peakingLogo.png";
 import like from "/likeemo1.png";
 import unlike from "/likeemo2.png";
 
-
-
 const API_URL = "http://localhost:8000/api";
+
+// Default profile picture URLs for post authors and comment authors
+const defaultProfilePic = "https://via.placeholder.com/30?text=PF";
+const defaultCommentPic = "https://via.placeholder.com/20?text=PF";
 
 const Posts = () => {
   const [posts, setPosts] = useState([]);
@@ -22,7 +24,6 @@ const Posts = () => {
 
   const token = localStorage.getItem("token");
   const authHeaders = token ? { Authorization: `Token ${token}` } : {};
-
 
   useEffect(() => {
     if (errorMessage || successMessage) {
@@ -44,27 +45,26 @@ const Posts = () => {
         console.error("Error fetching posts:", err);
         setErrorMessage("Failed to load posts.");
       } finally {
-        setLoading(false); // Make sure loading is stopped
+        setLoading(false);
       }
     };
-  
+
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/user/`, {
           headers: authHeaders,
         });
+        // Assuming res.data contains a user object. Adjust if necessary.
         setCurrentUser(res.data.username);
       } catch (error) {
         console.error("Error fetching user info", error);
         setErrorMessage("Error fetching user info.");
       }
     };
-  
+
     fetchPosts();
     fetchUser();
   }, []);
-  
-  
 
   const handleFileChange = (event) => {
     const files = Array.from(event.target.files);
@@ -201,10 +201,7 @@ const Posts = () => {
       setPosts(
         posts.map((post) =>
           post.id === postId
-            ? {
-                ...post,
-                comments: post.comments.filter((comment) => comment.id !== commentId),
-              }
+            ? { ...post, comments: post.comments.filter((comment) => comment.id !== commentId) }
             : post
         )
       );
@@ -217,7 +214,6 @@ const Posts = () => {
 
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-10">
-      {/* rest of the component remains unchanged */}
       <br />
       <br />
       <br />
@@ -246,9 +242,7 @@ const Posts = () => {
         </div>
       )}
       {successMessage && (
-        <div
-          style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}
-        >
+        <div style={{ color: "green", marginBottom: "15px", fontWeight: "bold" }}>
           {successMessage}
         </div>
       )}
@@ -424,9 +418,7 @@ const Posts = () => {
       )}
 
       <div className="d-flex align-items-center">
-        <div style={{ width: "200px", backgroundColor: "red" }}>
-          hello
-        </div>
+        <div style={{ width: "200px", backgroundColor: "red" }}>hello</div>
 
         {/* Feed */}
         <div>
@@ -484,12 +476,24 @@ const Posts = () => {
                       />
                     ))}
                   </div>
-                  {/* Caption, Username & Timestamp */}
+                  {/* Caption, Username, Profile Picture & Timestamp */}
                   <div className="mt-2 text-center">
                     <p className="text-bold-700 text-sm">{post.caption}</p>
-                    <p className="text-xs text-gray-500">
-                      Posted by {post.user} on {post.created_at}
-                    </p>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <img
+                        src={(post.user && post.user.profile_picture) || defaultProfilePic}
+                        alt="Profile"
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          borderRadius: "50%",
+                          marginRight: "5px",
+                        }}
+                      />
+                      <p className="text-xs text-gray-500">
+                        Posted by {post.user && post.user.username} on {post.created_at}
+                      </p>
+                    </div>
                     {/* Like Button */}
                     <button
                       onClick={() => handleLike(post.id)}
@@ -513,9 +517,7 @@ const Posts = () => {
                     {/* Comments Section */}
                     <div className="mt-3">
                       {post.comments && post.comments.length > 0 && (
-                        <div
-                          style={{ textAlign: "left", marginBottom: "10px" }}
-                        >
+                        <div style={{ textAlign: "left", marginBottom: "10px" }}>
                           {post.comments.map((comment) => (
                             <div
                               key={comment.id}
@@ -527,24 +529,33 @@ const Posts = () => {
                                 justifyContent: "space-between",
                               }}
                             >
-                              <span>
-                                <strong>{comment.user}:</strong>{" "}
-                                {comment.text}{" "}
-                                <span
+                              <div style={{ display: "flex", alignItems: "center" }}>
+                                <img
+                                  src={(comment.user && comment.user.profile_picture) || defaultCommentPic}
+                                  alt="Comment profile"
                                   style={{
-                                    fontSize: "0.7em",
-                                    color: "#555",
-                                    marginLeft: "5px",
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    marginRight: "5px",
                                   }}
-                                >
-                                  ({comment.created_at})
+                                />
+                                <span>
+                                  <strong>{comment.user && comment.user.username}:</strong> {comment.text}{" "}
+                                  <span
+                                    style={{
+                                      fontSize: "0.7em",
+                                      color: "#555",
+                                      marginLeft: "5px",
+                                    }}
+                                  >
+                                    ({comment.created_at})
+                                  </span>
                                 </span>
-                              </span>
-                              {comment.user === currentUser && (
+                              </div>
+                              {comment.user && comment.user.username === currentUser && (
                                 <button
-                                  onClick={() =>
-                                    handleDeleteComment(post.id, comment.id)
-                                  }
+                                  onClick={() => handleDeleteComment(post.id, comment.id)}
                                   style={{
                                     marginLeft: "10px",
                                     backgroundColor: "#e3342f",
@@ -568,9 +579,7 @@ const Posts = () => {
                         <input
                           type="text"
                           value={commentInputs[post.id] || ""}
-                          onChange={(e) =>
-                            handleCommentChange(post.id, e.target.value)
-                          }
+                          onChange={(e) => handleCommentChange(post.id, e.target.value)}
                           placeholder="Add a comment..."
                           style={{
                             width: "100%",
@@ -583,7 +592,7 @@ const Posts = () => {
                       </form>
                     </div>
                     {/* Delete button visible only for the post owner */}
-                    {currentUser === post.user && (
+                    {post.user && post.user.username === currentUser && (
                       <button
                         onClick={() => handleDelete(post.id)}
                         style={{
