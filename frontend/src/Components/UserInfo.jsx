@@ -81,6 +81,21 @@ const UserInfo = () => {
 
           {user ? (
             <div className="text-center">
+              <img
+                src={
+                  user.profile_picture ||
+                  "https://via.placeholder.com/100x100.png?text=No+Image"
+                }
+                alt="User Profile"
+                className="rounded-circle mb-3"
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  objectFit: "cover",
+                  border: "2px solid #ccc",
+                }}
+              />
+
               <p>
                 <strong>Username:</strong> {user.username}
               </p>

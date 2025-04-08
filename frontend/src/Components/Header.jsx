@@ -4,6 +4,7 @@ import axios from "axios";
 
 const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -19,7 +20,10 @@ const Header = () => {
           Authorization: `Token ${token}`,
         },
       })
-      .then(() => setIsLoggedIn(true))
+      .then((res) => {
+        setUser(res.data);
+        setIsLoggedIn(true);
+      })
       .catch((error) => {
         console.error("User is not logged in:", error);
         setIsLoggedIn(false);
@@ -69,7 +73,7 @@ const Header = () => {
             </h4>
           </div>
 
-          <ul className="nav">
+          <ul className="nav align-items-center">
             <li className="nav-item">
               <a className="nav-link text-black" href="/posts">
                 Posts
@@ -90,19 +94,42 @@ const Header = () => {
                 Adoption Center
               </a>
             </li>
-            <li className="nav-item">
-              <a className="nav-link text-black" href="/userinfo">
-                User Info
-              </a>
-            </li>
-            {isLoggedIn && (
+
+            {isLoggedIn && user && (
+              <>
+                <li className="nav-item d-flex align-items-center ms-3">
+                  <a
+                    href="/userinfo"
+                    className="d-flex align-items-center text-decoration-none text-black"
+                  >
+                    <img
+                      src={
+                        user.profile_picture ||
+                        "https://via.placeholder.com/35x35.png?text=👤"
+                      }
+                      alt="Profile"
+                      className="rounded-circle me-2"
+                      style={{ width: "35px", height: "35px", objectFit: "cover" }}
+                    />
+                    <span>{user.username}</span>
+                  </a>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="btn btn-outline-dark ms-3"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </>
+            )}
+
+            {!isLoggedIn && (
               <li className="nav-item">
-                <button
-                  className="btn btn-outline-dark ms-3"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </button>
+                <a className="nav-link text-black" href="/login">
+                  Login
+                </a>
               </li>
             )}
           </ul>

@@ -1,32 +1,50 @@
 import React, { useState } from "react";
 import axios from "axios";
 import logo from "/logo5.png";
-import cat1 from "/playingLogo.png";
 import cat2 from "/sleepingLogo.png";
 
 const Signup = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState(""); // Added email field
+  const [email, setEmail] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfilePic(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess(false);
 
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("email", email);
+    if (profilePic) formData.append("profile_picture", profilePic);
+
     try {
-      const response = await axios.post("http://localhost:8000/api/signup/", {
-        username,
-        password,
-        email, // Send email in the request
-      });
+      const response = await axios.post(
+        "http://localhost:8000/api/signup/",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("Signup successful:", response.data);
       setSuccess(true);
-      // Optionally redirect or update UI
-      window.location.href = "/login"; // Redirect to login page after signup
+      window.location.href = "/login";
     } catch (error) {
       if (error.response) {
         const errorMessage = error.response.data.error || "Signup failed";
@@ -53,16 +71,12 @@ const Signup = () => {
           transform: "translateX(-50%)",
         }}
       >
-        <img
-          src={logo}
-          alt="Peeking Cat"
-          className="img-fluid"
-          style={{ width: "100px" }}
-        />
+        <img src={logo} alt="Peeking Cat" className="img-fluid" style={{ width: "100px" }} />
       </div>
+
       <div className="d-flex align-items-center">
-        {/* Left empty div for image */}
         <div style={{ width: "400px" }}></div>
+
         <div
           className="card p-4 shadow"
           style={{
@@ -74,11 +88,29 @@ const Signup = () => {
           }}
         >
           <h2 className="text-center">SignUp</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
+            <div className="mb-3 text-center">
+              <label className="form-label"><strong>Profile Picture</strong></label>
+              <div>
+                {previewUrl && (
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="rounded-circle mb-2"
+                    style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="form-control"
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
+
             <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Username
-              </label>
+              <label htmlFor="username" className="form-label">Username</label>
               <input
                 type="text"
                 className="form-control"
@@ -88,10 +120,9 @@ const Signup = () => {
                 required
               />
             </div>
+
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
+              <label htmlFor="email" className="form-label">Email</label>
               <input
                 type="email"
                 className="form-control"
@@ -101,10 +132,9 @@ const Signup = () => {
                 required
               />
             </div>
+
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
+              <label htmlFor="password" className="form-label">Password</label>
               <input
                 type="password"
                 className="form-control"
@@ -114,22 +144,23 @@ const Signup = () => {
                 required
               />
             </div>
+
             <button type="submit">SignUp</button>
+
             <p className="or">
               or
               <br />
               <a href="/Login">Login</a>
             </p>
+
             {error && <p className="text-danger mt-2 text-center">{error}</p>}
             {success && (
-              <p className="text-success mt-2 text-center">
-                Signup successful!
-              </p>
+              <p className="text-success mt-2 text-center">Signup successful!</p>
             )}
           </form>
         </div>
-        {/* Right empty div for image */}
-        <div style={{ width: "400px", }}>
+
+        <div style={{ width: "400px" }}>
           <img
             src={cat2}
             alt="Sleeping Cat"
@@ -140,7 +171,7 @@ const Signup = () => {
               left: "-50%",
               position: "relative",
             }}
-          ></img>
+          />
         </div>
       </div>
     </div>
