@@ -4,192 +4,25 @@ import Logo from "/logo.png";
 import SplitText from "../TextAnimations/SplitText/SplitText";
 import VariableProximity from "../TextAnimations/VariableProximity/VariableProximity";
 import Footer from "./Footer";
-import { Button, Popover, Skeleton } from "antd";
-
-const contentStyle = {
-  height: "16px",
-  color: "#fff",
-  lineHeight: "16px",
-  textAlign: "center",
-  background: "black",
-};
-const content = (
-  <div>
-    <p>Content</p>
-    <p>Content</p>
-  </div>
-);
 
 const message = `
-Here You can adopt a cat as well as talk with cat owners and discuss the problem related to health issue and can admire the cutness of 
-   adorable cats
-   `;
+Here You can adopt a cat as well as talk with cat owners and discuss the problem related to health issue and can admire the cuteness of 
+adorable cats.`;
+
+const message3 = `We work closely with local shelters and foster homes to rescue stray cats, providing them with medical care, socialization, and love. 
+We assess each cat’s personality and health to ensure they are a good fit for adoption, and we match them with families who are ready to offer them a lifetime of care. 
+Our process is designed to be smooth and supportive, helping both you and the cat transition into your new life together.`;
+
 const Home = () => {
   const containerRef = useRef(null);
 
-  const items = [
-    {
-      content:
-        "Do you think cats purr because they're happy, or are they secretly trying to hypnotize you into giving them more treats?",
-    },
-    {
-      content: (
-        <p>
-          Cats purr like a fuzzy little massage machine, but it's not always
-          because they're happy. They might be purring to say, "Hey, I’m
-          stressed out!" or "Ouch, that hurts, but I’ll heal with my magical
-          purr powers!" (Purr-fect for recovery!)
-        </p>
-      ),
-    },
-    {
-      content:
-        "Do you ever wonder if your cat’s just pretending to sleep so they don’t have to deal with the real world?",
-    },
-    {
-      content: (
-        <p>
-          {" "}
-          Cats are sleep champions—anywhere from 12-16 hours a day! If they were
-          humans, they’d definitely be those people who say, “I work hard… at
-          napping.” They’re nocturnal little creatures that prefer the quiet of
-          dawn and dusk for their “crusades” (or maybe just looking for food).
-        </p>
-      ),
-    },
-    {
-      content:
-        "Are cats secretly trying to start a revolution, one scratched-up couch at a time",
-    },
-    {
-      content: (
-        <p>
-          Cats have these retractable claws, like built-in Swiss Army knives for
-          self-defense, climbing, or just scratching your favorite couch. One
-          minute they’re sheathed like tiny ninja swords, and the next, they’re
-          unleashed for maximum drama!
-        </p>
-      ),
-    },
-    {
-      content:
-        "If cats could run 30 miles per hour, how long do you think it would take for them to catch that “mouse” you definitely left for them to find?",
-    },
-    {
-      content: (
-        <p>
-          {" "}
-          Your cat might look like a couch potato, but don’t let that fool you.
-          In the wild, they could run a 5K in less than 30 minutes—if they could
-          be bothered to get off the couch, of course. Their reflexes are
-          lightning-fast and they’re always on the prowl... for snacks.
-        </p>
-      ),
-    },
-    {
-      content:
-        "If your cat could demand a throne, would they choose a velvet pillow or your lap?",
-    },
-    {
-      content: (
-        <p>
-          In Egypt, cats were basically the Kardashians of the animal world.
-          They were worshipped, adored, and—fun fact—killing a cat was a major
-          crime. So yeah, no pressure, but if you have a cat at home, you’re
-          basically living with royalty.
-        </p>
-      ),
-    },
-    {
-      content:
-        "Is your cat trying to ask for food, or are they secretly running a stand-up comedy routine just for you?",
-    },
-    {
-      content: (
-        <p>
-          Cats don’t meow at each other. Nope, they reserve that for you, their
-          human. So when your cat is meowing at you, it’s basically them saying,
-          “Excuse me, servant, I demand food, attention, or both... NOW.”{" "}
-        </p>
-      ),
-    },
-    {
-      content:
-        "Is your cat secretly trying to start a new beauty trend with their 'all-lick, all-day' skincare routine?",
-    },
-    {
-      content: (
-        <p>
-          Cats are the original clean freaks. They spend hours licking
-          themselves like tiny fuzzy hygiene experts. It’s their version of a
-          spa day, and they’re really good at it. If you ever want to start a
-          beauty vlog, just follow your cat for tips.{" "}
-        </p>
-      ),
-    },
-    {
-      content:
-        "Do you think your cat's night vision is why they always know when you're about to eat something they want?",
-    },
-    {
-      content: (
-        <p>
-          {" "}
-          Cats have night vision that would make Batman jealous. They can see in
-          nearly total darkness, which helps them track their "prey" (or maybe
-          just that piece of kibble that fell behind the fridge).
-        </p>
-      ),
-    },
-    {
-      content:
-        "Is your cat kneading you because they're still trying to get milk... or do they just want to make you a human pancake?",
-    },
-    {
-      content: (
-        <p>
-          When cats knead with their paws, they’re not just being adorable.
-          They’re channeling their inner baby cat instincts, pretending you're
-          their mom and they're trying to get milk. It’s like a tiny massage...
-          and sometimes, it's a little too real when your cat is kneading your
-          lap at 3 AM.
-        </p>
-      ),
-    },
-    {
-      content:
-        "If your whiskers could talk, would they be like, 'Hey, you're about to walk into a door,' or 'Time to knock something off the counter!'?",
-    },
-    {
-      content: (
-        <p>
-          {" "}
-          Imagine if your hair could tell you when you were about to bump into
-          something. That's basically what a cat's whiskers do! They’re like
-          little GPS systems, guiding your feline friend through the dark. They
-          even measure if they can squeeze into that "totally-too-small" box!
-        </p>
-      ),
-    },
-  ];
-
-
-  const message3 = `
-    We work closely with local shelters and foster homes to rescue stray cats, providing them with medical care, socialization, and love. 
-    We assess each cat’s personality and health to ensure they are a good fit for adoption, and we match them with families who are ready to offer them a lifetime of care. 
-    Our process is designed to be smooth and supportive, helping both you and the cat transition into your new life together.
-
-    `;
   return (
-    <div style={{ 
-      padding: "0px",
-     }}>
-      <br />
-      <div className="title">
+    <div style={{  fontFamily: "Arial, sans-serif" }}>
+      <div className="title" style={{ textAlign: "center", marginBottom: "20px" }}>
         <h1>
           <SplitText
             text="Welcome To Samishi Community"
-            className="text-2xl font-semibold text-center"
+            className="text-2xl font-semibold"
             delay={150}
             animationFrom={{ opacity: 0, transform: "translate3d(0,50px,0)" }}
             animationTo={{ opacity: 1, transform: "translate3d(0,0,0)" }}
@@ -199,52 +32,106 @@ const Home = () => {
           />
         </h1>
       </div>
-      <br />
-      <div>
-        <img src={Logo} className="logo" alt="Cat logo" />
+
+      <div style={{ textAlign: "center", marginBottom: "10px" }}>
+        <img src={Logo} className="logo" alt="Cat logo" style={{ width: "200px", height: "220px" }} />
       </div>
 
-      <div className="login">
+      <div className="login" style={{ textAlign: "center", marginBottom: "10px" }}>
         <a href="/login">
-          <button>LOGIN</button>
+          <button>
+            LOGIN
+          </button>
         </a>
-        <p className="or">
+        <p className="or" style={{ margin: "10px 0" }}>
           or
           <br />
-          <a href="/SignUp">Sign Up</a>
+          <a href="/SignUp" style={{ color: "#6c63ff", textDecoration: "none" }}>Sign Up</a>
         </p>
       </div>
-      
-        <div>
-          <p id="variable-proximity-demo">
-            <div ref={containerRef} style={{ position: "relative" }}>
-              <VariableProximity
-                label={"Welcome to the heaven of cats"}
-                className={"variable-proximity-demo"}
-                fromFontVariationSettings="'wght' 300, 'opsz' 9"
-                toFontVariationSettings="'wght' 700, 'opsz' 20"
-                containerRef={containerRef}
-                radius={100}
-                falloff="linear"
-              />
-            </div>
-          </p>
-        </div>
 
+      <div style={{ marginBottom: "30px" }}>
+        <p id="variable-proximity-demo">
+          <div ref={containerRef} style={{ position: "relative" }}>
+            <VariableProximity
+              label={"Welcome to the heaven of cats"}
+              className={"variable-proximity-demo"}
+              fromFontVariationSettings="'wght' 300, 'opsz' 9"
+              toFontVariationSettings="'wght' 700, 'opsz' 20"
+              containerRef={containerRef}
+              radius={100}
+              falloff="linear"
+            />
+          </div>
+        </p>
+      </div>
+
+      <div style={{ marginBottom: "30px" }}>
         <pre>{message}</pre>
-      <br />
-      <br />
-     <pre>{message3}</pre>
-      
-          <div
+      </div>
+      <div style={{ marginBottom: "40px" }}>
+        <pre>{message3}</pre>
+      </div>
+
+      <div style={{ marginBottom: "30px" }}>
+        <h2 style={{ color: "#6c63ff" }}>Why Adopt a Cat?</h2>
+        <p>
+          Adopting a cat is a rewarding experience. Cats are loving, playful, and make great companions. By adopting, you are giving a homeless cat a second chance at life and helping reduce the number of stray animals.
+        </p>
+        <h3 style={{ color: "#6c63ff" }}>Adoption Benefits:</h3>
+        <div>
+        <ul>Save a life and provide a loving home.</ul>
+          <ul>Enjoy the companionship of a loyal pet.</ul>
+          <ul>Support local shelters and rescue organizations.</ul>
+          <ul>Reduce stress and improve mental health with a furry friend.</ul>
+          <ul>Help control the stray animal population.</ul>
+        
+        </div>
+         
+      </div>
+
+      <div style={{ marginBottom: "30px" }}>
+        <h2 style={{ color: "#6c63ff" }}>How to Adopt?</h2>
+        <p>
+          Our adoption process is simple and supportive. Browse through our list of adorable cats available for adoption, fill out an application, and our team will guide you through the next steps.
+        </p>
+        <a href="/signup">
+          <button style={{ padding: "10px 20px", backgroundColor: "#6c63ff", color: "#fff", border: "none", borderRadius: "5px" }}>
+            View Cats for Adoption
+          </button>
+        </a>
+      </div>
+
+      <div style={{ marginBottom: "30px" }}>
+        <h2 style={{ color: "#6c63ff" }}>Fun Facts About Cats</h2>
+        <div>
+          <ul>Cats sleep for 12-16 hours a day on average.</ul>
+          <ul>Each cat's nose print is unique, just like human fingerprints.</ul>
+          <ul>Cats have five toes on their front paws but only four on their back paws.</ul>
+          <ul>A group of cats is called a "clowder."</ul>
+          <ul>Cats can rotate their ears 180 degrees.</ul>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: "30px" }}>
+        <h2 style={{ color: "#6c63ff" }}>Testimonials</h2>
+        <blockquote style={{ fontStyle: "italic", backgroundColor: "#f9f9f9", padding: "15px", borderRadius: "5px" }}>
+          "Adopting a cat from Samishi was the best decision I ever made. My cat, Luna, has brought so much joy to my life!" - Sarah
+        </blockquote>
+        <blockquote style={{ fontStyle: "italic", backgroundColor: "#f9f9f9", padding: "15px", borderRadius: "5px", marginTop: "10px" }}>
+          "The adoption process was smooth and easy. The team was so supportive and helpful!" - John
+        </blockquote>
+      </div>
+
+      <div
         style={{
           backgroundColor: "rgba(104, 123, 230, 0.5)",
-          padding: "10px",
+          padding: "20px",
+          borderRadius: "5px",
         }}
       >
         <Footer />
       </div>
-      <br />
     </div>
   );
 };

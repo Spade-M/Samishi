@@ -82,6 +82,7 @@ const Login = () => {
               className="form-control"
               id="username"
               value={username}
+              placeholder="Enter your username"
               onChange={(e) => setUsername(e.target.value)}
               required
             />
@@ -94,6 +95,7 @@ const Login = () => {
               type="password"
               className="form-control"
               id="password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

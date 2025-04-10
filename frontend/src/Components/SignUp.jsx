@@ -116,6 +116,7 @@ const Signup = () => {
                 className="form-control"
                 id="username"
                 value={username}
+                placeholder="Your Name"
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
@@ -128,6 +129,7 @@ const Signup = () => {
                 className="form-control"
                 id="email"
                 value={email}
+                placeholder="test@gmail.com"
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
@@ -140,6 +142,7 @@ const Signup = () => {
                 className="form-control"
                 id="password"
                 value={password}
+                placeholder="********"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
