@@ -1020,4 +1020,7 @@ export default ErrorPage;
 
     className="w-full h-48 object-cover rounded-lg" // Reduced fixed height
                         
-    
+     <h6>
+        Note : Text Us the post id og animals along with your address, so we can
+        check the availability of it for you{" "}
+      </h6>

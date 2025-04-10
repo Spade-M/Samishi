@@ -94,6 +94,11 @@ const Header = () => {
                 Adoption Center
               </a>
             </li>
+            <li className="nav-item">
+              <a className="nav-link text-black" href="/contact">
+                Contact Us
+              </a>
+            </li>
 
             {isLoggedIn && user && (
               <>
