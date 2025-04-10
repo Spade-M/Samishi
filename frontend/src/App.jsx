@@ -7,15 +7,14 @@ import AboutUs from "./Components/AboutUs";
 import Login from "./Components/Login";
 import SignUp from "./Components/SignUp";
 import User from "./Components/UserInfo";
-import UserQuery from "./Components/UserQuery";
 import Edit from "./Components/EditInfo";
-import More from "./Components/More";
 import Layout from "./Components/Layout";
 import Facts from "./Components/Facts";
 import Contact from "./Components/Contact";
 import Adoption from "./Components/Adoption";
 import axios from "axios";
 import "./App.css";
+import Footer from "./Components/Footer";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,9 +52,7 @@ function App() {
         { path: "/login", element: <Login /> },
         { path: "/signup", element: <SignUp /> },
         { path: "/userinfo", element: <User /> },
-        { path: "/userquery", element: <UserQuery /> },
         { path: "/edit", element: <Edit /> },
-        { path: "/more", element: <More /> },
       ],
     },
   ]);
@@ -64,6 +61,18 @@ function App() {
     <>
       {isLoggedIn && <Header />}
       <RouterProvider router={router} />
+      
+        {!isLoggedIn && 
+          <div
+        style={{
+          backgroundColor: "rgba(104, 123, 230, 0.5)",
+          padding: "10px",
+        }}
+      >
+        <Footer />
+      </div>
+}
+      
     </>
   );
 }

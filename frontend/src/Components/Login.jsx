@@ -59,6 +59,7 @@ const Login = () => {
           style={{ width: "100px" }}
         />
       </div>
+      <br />
       <div
         className="card p-4 shadow position-relative"
         style={{
@@ -67,6 +68,7 @@ const Login = () => {
           borderRadius: "15px",
           border: "none",
           overflow: "hidden",
+          left: "35%",
           background: "rgb(246, 212, 247)",
         }}
       >
@@ -98,7 +100,8 @@ const Login = () => {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">
+          <br />
+          <button type="submit" >
             Login
           </button>
           <p className="or text-center mt-3">
@@ -126,13 +129,6 @@ const Login = () => {
           }}
         />
       </div>
-
-      <div
-        style={{
-          backgroundColor: "rgba(104, 123, 230, 0.5)",
-          padding: "10px",
-        }}
-      ></div>
     </div>
   );
 };

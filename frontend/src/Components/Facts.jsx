@@ -117,15 +117,6 @@ const Facts = () => {
         className="text-2xl font-bold mb-8"
       />
       <br />
-
-      <div
-        style={{
-          backgroundColor: "rgba(104, 123, 230, 0.5)",
-          padding: "10px",
-        }}
-      >
-        <Footer />
-      </div>
     </div>
   );
 };
