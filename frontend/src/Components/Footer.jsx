@@ -9,10 +9,9 @@ const Footer = () => {
         <br />
         <nav className="flex flex-wrap gap-6 text-sm text-center md:text-left">
           <a href="/" className="hover:text-gray-400 transition px-3">Home</a>
-          <a href="/about" className="hover:text-gray-400 transition px-3">About</a>
+          <a href="/about" className="hover:text-gray-400 transition px-3">About Us</a>
           <a href="/contact" className="hover:text-gray-400 transition px-3">Contact Us</a>
           <a href="/facts" className="hover:text-gray-400 transition px-3">Cat Facts</a>
-          <a href="/faq" className="hover:text-gray-400 transition px-3">FAQ</a>
         </nav>
         
         <div className="mt-6 md:mt-0 text-center md:text-right">
