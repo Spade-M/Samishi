@@ -545,11 +545,11 @@ const Adoption = () => {
         ) : (
           <div
           style={{
-            padding: "20px",
+            padding: "50px",
             alignItems: "center",
             justifyItems: "center",
             backgroundColor: "pink",
-            maxWidth: "600px",
+            maxWidth: "800px",
           }}
           >
             {posts.length === 0 && !loading && (
@@ -562,7 +562,7 @@ const Adoption = () => {
                   className="p-4 rounded-xl shadow-lg overflow-hidden mb-6 mx-auto"
                   style={{
                     alignItems: "center",
-                    width: "70%",
+                    width: "100%",
                     background: "rgb(246, 212, 247)",
                     borderRadius: "12px",
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
@@ -595,12 +595,12 @@ const Adoption = () => {
                   )}
 </div>
                   {/* Post Content */}
-                  <div className="text-center px-2">
+                  <div className="text-center mt-2">
                     <h3 className="font-bold text-lg mb-2">{post.title}</h3>
-                    <p className="text-sm mb-2">{post.description}</p>
+                    <p className="text-bold-700 text-sm">{post.description}</p>
 
                     {/* Posted by */}
-                    <div className="flex items-center justify-start mb-3">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
                       <img
                         src={
                           post.admin && post.admin.profile_picture
@@ -621,11 +621,11 @@ const Adoption = () => {
                       />
                       <p className="text-xs text-gray-600">
                         Posted by{" "}
-                        <span className="font-medium">
+                        
                           {post.admin && post.admin.username
                             ? post.admin.username
                             : "Unknown User"}
-                        </span>{" "}
+                        {" "}
                         on {formatDateTime(post.created_at)}
                       </p>
                     </div>
@@ -634,13 +634,19 @@ const Adoption = () => {
                     <div className="flex items-center space-x-2 mb-4">
                       <button
                         onClick={() => handleLike(post.id)}
-                        className="flex items-center space-x-1 text-gray-700 hover:text-pink-600 transition p-1 rounded"
+                        style={{
+                          marginTop: "5px",
+                          padding: "5px 10px",
+                          backgroundColor: post.is_liked ? "#f6d4f7" : "#f6d4f7",
+                          color: "black",
+                          cursor: "pointer",
+                        }}
                         title="Like/Unlike"
                       >
                         {post.is_liked ? (
-                          <img src={like} alt="Unlike" className="w-6 h-6" />
+                          <img src={like} alt="Unlike" width= "40px" />
                         ) : (
-                          <img src={unlike} alt="Like" className="w-6 h-6" />
+                          <img src={unlike} alt="Like" width  = "40px" />
                         )}
                         <span className="text-xs font-medium">
                           ({post.likes_count})
@@ -661,15 +667,21 @@ const Adoption = () => {
                     </div>
 
                     {/* Comments Section */}
-                    <div className="mt-4 border-t border-gray-300 pt-3">
+                    <div className="mt-3">
                       {post.comments && post.comments.length > 0 && (
                         <div className="text-left mb-3 space-y-2">
                           {post.comments.map((comment, index) => (
                             <div
                               key={comment.id || index}
-                              className="flex items-start justify-between text-xs"
+                              style={{
+                                marginBottom: "5px",
+                                fontSize: "0.85em",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                              }}
                             >
-                              <div className="flex items-start space-x-2">
+                              <div className="flex items-center space-x-2">
                                 <img
                                   src={
                                     comment.user && comment.user.profile_picture
@@ -681,22 +693,33 @@ const Adoption = () => {
                                       ? comment.user.username
                                       : "User"
                                   }'s profile`}
-                                  className="w-5 h-5 object-cover rounded-full border border-gray-300 flex-shrink-0 mt-0.5"
+                                  style={{
+                                    width: "20px",
+                                    height: "20px",
+                                    borderRadius: "50%",
+                                    marginRight: "5px",
+                                  }}
                                 />
-                                <div>
-                                  <span className="font-semibold text-gray-800">
+                                <span>
+                                  <strong className="font-semibold text-gray-800">
                                     {comment.user && comment.user.username
                                       ? comment.user.username
                                       : "Unknown User"}
                                     :
-                                  </span>{" "}
+                                  </strong>{" "}
                                   <span className="text-gray-700">
                                     {comment.text}
                                   </span>
-                                  <span className="text-gray-500 text-[0.7rem] ml-1 block">
+                                  <span
+                                  style={{
+                                    fontSize: "0.7em",
+                                    color: "#555",
+                                    marginLeft: "5px",
+                                  }} 
+                                  >
                                     ({formatDateTime(comment.created_at)})
                                   </span>
-                                </div>
+                                </span>
                               </div>
                               {(isAdmin ||
                                 (comment.user &&
@@ -705,21 +728,19 @@ const Adoption = () => {
                                   onClick={() =>
                                     handleDeleteComment(post.id, comment.id)
                                   }
-                                  className="text-red-500 hover:text-red-700 transition p-0.5 ml-2 flex-shrink-0"
+                                  style={{
+                                    marginLeft: "10px",
+                                    backgroundColor: "#e3342f",
+                                    color: "#fff",
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer",
+                                    padding: "2px 6px",
+                                    fontSize: "0.75em",
+                                  }}
                                   title="Delete comment"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
+                                  Delete
                                 </button>
                               )}
                             </div>
@@ -738,8 +759,15 @@ const Adoption = () => {
                               handleCommentChange(post.id, e.target.value)
                             }
                             placeholder="Add a comment..."
-                            className="flex-grow px-3 py-1.5 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-1 focus:ring-pink-400 focus:border-pink-400"
+                            style={{
+                              width: "100%",
+                              padding: "6px 8px",
+                              border: "1px solid #ddd",
+                              borderRadius: "4px",
+                              fontSize: "0.9em",
+                            }}
                           />
+                          <br />
                           <button
                             type="submit"
                             className="px-3 py-1.5 bg-pink-500 text-white rounded-full text-sm hover:bg-pink-600 transition focus:outline-none focus:ring-1 focus:ring-pink-600"

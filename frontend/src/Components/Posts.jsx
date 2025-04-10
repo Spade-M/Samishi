@@ -428,11 +428,11 @@ const Posts = () => {
           ) : (
             <div
               style={{
-                padding: "20px",
+                padding: "50px",
                 alignItems: "center",
                 justifyItems: "center",
                 backgroundColor: "pink",
-                maxWidth: "600px",
+                maxWidth: "800px",
               }}
             >
               {posts.length === 0 && (
@@ -444,7 +444,7 @@ const Posts = () => {
                   className="p-3 rounded-lg shadow-lg"
                   style={{
                     alignItems: "center",
-                    width: "70%",
+                    width: "100%",
                     background: "rgb(246, 212, 247)",
                     borderRadius: "12px",
                     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
