@@ -486,18 +486,48 @@ const Adoption = () => {
             </form>
             {/* Image Preview */}
             {imagePreview && (
-              <div className="mb-5 p-2 border rounded-lg flex flex-col items-center">
+              <div 
+              style={{
+                position: "relative",
+                margin: "5px",
+                width: "100px",
+                height: "100px",
+                overflow: "hidden",
+                borderRadius: "8px",
+                boxShadow: "0 4px 8px rgba(234, 169, 238, 0.5)",
+              }}
+              >
                 <img
                   src={imagePreview}
                   alt="Preview"
-                  className="w-32 h-32 object-cover rounded-md"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
                 />
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="mt-2 text-sm text-red-500 hover:underline"
+                  style={{
+                    position: "absolute",
+                    top: "2px",
+                    right: "2px",
+                    background: "rgba(192, 116, 116, 0.6)",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "10px",
+                    height: "20px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    lineHeight: "20px",
+                    textAlign: "center",
+                    
+                  }}
+                  title="Remove image"
                 >
-                  Remove Image
+                  &times;
                 </button>
               </div>
             )}
@@ -513,7 +543,15 @@ const Adoption = () => {
         {loading ? (
           <p className="text-center text-gray-500">Loading posts...</p>
         ) : (
-          <div>
+          <div
+          style={{
+            padding: "20px",
+            alignItems: "center",
+            justifyItems: "center",
+            backgroundColor: "pink",
+            maxWidth: "600px",
+          }}
+          >
             {posts.length === 0 && !loading && (
               <p className="text-center text-gray-500">No posts yet!</p>
             )}
@@ -522,19 +560,40 @@ const Adoption = () => {
                 <div
                   key={post.id}
                   className="p-4 rounded-xl shadow-lg overflow-hidden mb-6 mx-auto"
-                  style={{ background: "rgb(246, 212, 247)" }}
+                  style={{
+                    alignItems: "center",
+                    width: "70%",
+                    background: "rgb(246, 212, 247)",
+                    borderRadius: "12px",
+                    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
+                    overflow: "hidden",
+                    marginBottom: "20px",
+                  }}
                 >
                   {/* Post Image */}
+                  <div
+                    style={{
+                      display: "flex",
+                      overflowX: "auto",
+                      gap: "5px",
+                      width: "100%",
+                      paddingBottom: "5px",
+                    }}
+                  >
                   {post.image && (
-                    <div className="flex justify-center mb-3">
+                    
                       <img
                         src={post.image}
                         alt={`Adoption post ${post.id}`}
-                        className="w-full h-48 object-cover rounded-lg" // Reduced fixed height
+                        style={{
+                          width: "400px",
+                          height: "300px",
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
                       />
-                    </div>
                   )}
-
+</div>
                   {/* Post Content */}
                   <div className="text-center px-2">
                     <h3 className="font-bold text-lg mb-2">{post.title}</h3>
@@ -553,7 +612,12 @@ const Adoption = () => {
                             ? post.admin.username
                             : "User"
                         }'s profile`}
-                        className="w-8 h-8 object-cover rounded-full mr-2 border border-gray-300"
+                        style={{
+                          width: "30px",
+                          height: "30px",
+                          borderRadius: "50%",
+                          marginRight: "5px",
+                        }}
                       />
                       <p className="text-xs text-gray-600">
                         Posted by{" "}

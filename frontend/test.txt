@@ -1015,4 +1015,9 @@ export default ErrorPage;
       <div className="self-center" style={{ width: "100px", marginTop: "2rem", marginBottom: "1rem" }}>
         <img src={cat1} alt="Peeking Cat" className="w-[250px] h-auto" />
       </div>
+      Error uploading post TypeError: posts is not iterable
+    at handleSubmit 
+
+    className="w-full h-48 object-cover rounded-lg" // Reduced fixed height
+                        
     
