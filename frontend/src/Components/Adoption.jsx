@@ -294,12 +294,14 @@ const Adoption = () => {
       )}
 
       {isAdmin && (
+      
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-full mb-6 shadow transition duration-150 ease-in-out"
-        >
-          Create Adoption Post
-        </button>
+        onClick={() => setIsModalOpen(true)}
+        className="bg-blue-500 text-white px-4 py-2 rounded-full mb-5"
+      >
+        Create Adoption Post
+      </button>
+      
       )}
 
       {/* Create Adoption Post Modal */}
