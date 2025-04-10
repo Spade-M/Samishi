@@ -52,7 +52,7 @@ const EditInfo = () => {
         },
       });
       setMessage("User updated successfully.");
-      window.location.href = "/";
+      window.location.href = "/posts"; // redirect to posts page
     } catch (error) {
       console.error("Error updating user:", error);
       setMessage("Error updating user.");
@@ -95,7 +95,7 @@ const EditInfo = () => {
   };
 
   return (
-    <div>
+    <div style={{padding:"100px"}}>
       <div
         className="card p-4 shadow position-relative"
         style={{

@@ -35,8 +35,7 @@ const UserInfo = () => {
   }, []);
 
   return (
-    <div>
-      <br />
+    <div style={{padding : "120px"}}>
       <div>
         <img
           src={ball}
