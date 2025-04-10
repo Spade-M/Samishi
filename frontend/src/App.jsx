@@ -61,17 +61,7 @@ function App() {
     <>
       {isLoggedIn && <Header />}
       <RouterProvider router={router} />
-      
-        {!isLoggedIn && 
-          <div
-        style={{
-          backgroundColor: "rgba(104, 123, 230, 0.5)",
-          padding: "10px",
-        }}
-      >
-        <Footer />
-      </div>
-}
+    
       
     </>
   );

@@ -236,7 +236,14 @@ const Home = () => {
       <br />
      <pre>{message3}</pre>
       
-      
+          <div
+        style={{
+          backgroundColor: "rgba(104, 123, 230, 0.5)",
+          padding: "10px",
+        }}
+      >
+        <Footer />
+      </div>
       <br />
     </div>
   );

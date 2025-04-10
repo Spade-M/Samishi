@@ -68,7 +68,6 @@ const Login = () => {
           borderRadius: "15px",
           border: "none",
           overflow: "hidden",
-          left: "35%",
           background: "rgb(246, 212, 247)",
         }}
       >
