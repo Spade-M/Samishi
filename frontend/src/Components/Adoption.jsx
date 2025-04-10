@@ -277,10 +277,27 @@ const Adoption = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-gray-100 min-h-screen p-4 sm:p-10 w-full">
-      <div className="self-center" style={{ width: "100px", marginTop: "2rem", marginBottom: "1rem" }}>
-        <img src={cat1} alt="Peeking Cat" className="w-[250px] h-auto" />
-      </div>
+      <div className="flex flex-col items-center bg-gray-100 min-h-screen p-10">
+            <br />
+            <div
+            className="self-center"
+              style={{
+                width: "100px",
+                position: "relative",
+                top: "0px",
+                left: "44.5%",
+              }}
+            >
+              <img
+                src={cat1}
+                alt="Peeking Cat"
+                className="img-fluid"
+                style={{
+                  width: "250%",
+                }}
+              />
+            </div>
+      
 
       {errorMessage && (
         <div className="w-full max-w-xl p-3 mb-4 text-center font-bold text-red-700 bg-red-100 border border-red-400 rounded">

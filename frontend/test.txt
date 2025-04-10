@@ -1011,3 +1011,8 @@ export default ErrorPage;
                 </button>
               <br />
         
+<div className="flex flex-col items-center bg-gray-100 min-h-screen p-4 sm:p-10 w-full">
+      <div className="self-center" style={{ width: "100px", marginTop: "2rem", marginBottom: "1rem" }}>
+        <img src={cat1} alt="Peeking Cat" className="w-[250px] h-auto" />
+      </div>
+    
