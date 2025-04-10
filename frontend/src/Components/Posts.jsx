@@ -222,7 +222,7 @@ const Posts = () => {
           width: "100px",
           position: "relative",
           top: "0px",
-          left: "44.5%",
+          left: "41%",
         }}
       >
         <img
@@ -418,8 +418,7 @@ const Posts = () => {
       )}
 
       <div className="d-flex align-items-center">
-        <div style={{ width: "200px", backgroundColor: "red" }}>hello</div>
-
+       
         {/* Feed */}
         <div>
           <h2 className="text-lg font-bold text-center mb-3">Feed</h2>
@@ -614,7 +613,6 @@ const Posts = () => {
             </div>
           )}
         </div>
-        <div style={{ width: "200px" }}>Hello</div>
       </div>
     </div>
   );

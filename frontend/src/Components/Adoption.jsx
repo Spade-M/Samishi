@@ -304,13 +304,16 @@ const Adoption = () => {
   return (
     <div className="flex flex-col items-center bg-gray-100 min-h-screen p-10">
       <br />
+      <br />
+      <br />
+
       <div
         className="self-center"
         style={{
           width: "100px",
           position: "relative",
           top: "0px",
-          left: "44.5%",
+          left: "41%",
         }}
       >
         <img
