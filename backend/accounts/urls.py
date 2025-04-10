@@ -13,7 +13,8 @@ from .views import (
     AdoptionPostDetailView,
     AdoptionPostLikeView,         # New like endpoint for adoption posts
     AdoptionPostCommentView,
-    AdoptionCommentDeleteView
+    AdoptionCommentDeleteView,
+    ContactFormView
 )
 
 urlpatterns = [
@@ -36,4 +37,7 @@ urlpatterns = [
     path('adoption/<int:pk>/like/', AdoptionPostLikeView.as_view(), name='adoption-post-like'),
     path('adoption/<int:pk>/comments/', AdoptionPostCommentView.as_view(), name='adoption-post-comment'),
     path('adoption/<int:post_id>/comments/<int:comment_id>/', AdoptionCommentDeleteView.as_view(), name='adoption-comment-delete'),
+
+    # Contact Form
+    path('contact/', ContactFormView.as_view(), name='contact-form'),
 ]

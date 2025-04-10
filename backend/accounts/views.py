@@ -9,6 +9,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 from django.db import IntegrityError
+from django.core.mail import send_mail
 
 from .models import (
     Post, PostImage, Like, Comment, Profile, AdoptionPost,
@@ -332,3 +333,34 @@ class CommentDeleteView(APIView):
             return Response({"message": "Comment deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
         except Comment.DoesNotExist:
             return Response({"error": "Comment not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
+# -------------------- Contact Form Endpoint --------------------
+
+class ContactFormView(APIView):
+    def post(self, request):
+        username = request.data.get('username')
+        email = request.data.get('email')
+        post_id = request.data.get('postid')
+        address = request.data.get('address')
+        message = request.data.get('message')
+
+        if not all([username, email, post_id, address, message]):
+            return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Construct the email content
+        subject = f"New Contact Form Submission from {username}"
+        body = (
+            f"Username: {username}\n"
+            f"Email: {email}\n"
+            f"Post ID: {post_id}\n"
+            f"Address: {address}\n"
+            f"Message:\n{message}"
+        )
+        recipient_email = "sinhasarthak56@gmail.com"  #Im the admin for now lets see if i recieve mail Replace with your email
+
+        try:
+            send_mail(subject, body, email, [recipient_email])
+            return Response({"message": "Your message has been sent successfully."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": f"Failed to send email: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
