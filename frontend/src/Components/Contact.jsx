@@ -131,6 +131,9 @@ const Contact = () => {
           !error && <p className="text-center">Loading user info...</p>
         )}
       </div>
+      <br />
+      <h6>Note : Use id 0 for enquiry for other purpose.</h6>
+      
     </div>
   );
 };
